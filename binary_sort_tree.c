@@ -1,4 +1,4 @@
-#include</home/wangyan/C/binary_sort_tree.h>
+#include</home/onfire/C/binary_sort_tree.h>
 //规定，right子树的值必须大于父节点，哪怕等于也不行。
 //left子树的值就可以小于等于父节点了
 //还要写一下中序遍历，前序遍历，后序便里，求二叉数深度，按层遍历，清空二叉树。
@@ -280,13 +280,40 @@ int TreeDepth(TreeNode *tree_node){
 	}
 	return tree_depth;
 }
-//我擦。。不得不承认。。递归是一种非常好用的东西,感觉这个也要用递归了撒
 //不用递归的话，停止条件是什么？？
 //恩，很多时候迭代有个条件，就是它的停止条件非常好找，你可以快速找到，并且进行判断
-//而这里必须先确定树的长度，
-void TreeLevelTraversal(TreeNode *tree_node){
+void TreeLevelTraversal(TreeNode *root_node){
+	//firstly,save all the nodes to the array
+	TreeNode **tree_node_array=(TreeNode **)malloc(ARRAY_LENGTH*SIZEOFP);
+	tree_node_array[0]=root_node;
+	printf("%d\n",root_node->node_value);
+	int array_length=1;
+	int current_node_position=0;
+	while(current_node_position<array_length){
+		//save all the nodes to the array
+		int LastOfCurrentLevel=array_length;
+		while(current_node_position<LastOfCurrentLevel){
+			printf("%d",tree_node_array[current_node_position]->node_value);
+			if(tree_node_array[current_node_position]->left_child_node!=NULL){
+				tree_node_array[array_length]=tree_node_array[current_node_position]->left_child_node;
+				array_length++;
+			}
+			if(tree_node_array[current_node_position]->right_child_node!=NULL){
+				tree_node_array[array_length]=tree_node_array[current_node_position]->right_child_node;
+				array_length++;
+			}
+			current_node_position++;
+		}
+		printf("\n");
+	}
+	free(*tree_node_array);
 }
-int main(){
+void ReMallocNodeArray(TreeNode **tree_node_array){
+	ARRAY_COUNT++;
+	*tree_node_array=(TreeNode *)realloc(*tree_node_array,ARRAY_COUNT*ARRAY_LENGTH*sizeof(TreeNode));	
+}
+int main(void){
+	/*
 	TreeNode *tree_root_node=InitBinaryTree(10);
 	InsertTreeNode(tree_root_node,7);
 	InsertTreeNode(tree_root_node,4);
@@ -307,5 +334,6 @@ int main(){
 //	TreeNode *search_result=TreeSearch(tree_root_node,17);
 //	TreeNode *minimum_node=TreeMinimumNode(search_result);
 //	TreeNode *maximum_node=TreeMaximumNode(search_result);
+	*/
 	return 0;
 }

@@ -6,6 +6,7 @@
 #define RIGHT_NODE 1
 #define TRUE 1
 #define FALSE 0
+#define ARRAY_LENGTH 1
 /*
  if(1){
 	printf("test\n");
@@ -26,8 +27,19 @@ typedef struct tree_node_tag{
 	struct tree_node_tag *left_child_node;
 	struct tree_node_tag *right_child_node;
 }TreeNode;
+int *GlobalPointTemp;
+int static const SIZEOFP=sizeof(GlobalPointTemp);
+int static ARRAY_COUNT=1;
 //关于是否需要建立一个树的结构体，恩，暂时应该是不需要的。
 //不过，我需要思考一件事情，就是如果使用php，js等语言的话，改如何实现这样的结构呢？
 TreeNode *tree_node_malloc();
+void PrintNodeValue(TreeNode *arbitrary_tree_node);
+TreeNode *TreeNodeMalloc();
+TreeNode *InitBinaryTree(int node_value);
+void InsertTreeNode(TreeNode *root_node,int node_value);
+TreeNode *TreeSearch(TreeNode *root_node, int searched_node_value);
+TreeNode *TreeMinimumNode(TreeNode *temporary_node);
+TreeNode *TreeMaximumNode(TreeNode *temporary_node);
+void TreeLevelTraversal(TreeNode *tree_node);
 
 
