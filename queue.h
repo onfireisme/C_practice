@@ -5,16 +5,17 @@
 #define FALSE 0
 #define QUEUE_LENGTH 2 
 typedef int queueElementType;
-
-queueElementType *Queue;
-
-static queueElementType QUEUE_COUNT =1;
+typedef struct{
+	queueElementType *queueArray;
+	int begin;
+	int end;
+	int elementCount;
+}Queue;
 //use the begin and end to realize the loop function
 //when we insert first element,begin is 0, end is 1. when we insert 3
-int static BEGIN=0;
-int static END=0;
-int static ELEMENT_COUNT=0;
-void EnQueue(queueElementType element);
-void DeQueue();
+void EnQueue(queueElementType element,Queue *queue);
+void DeQueue(Queue *queue);
 queueElementType MaxElement();
-void QueueRemalloc(queueElementType **queue);
+void queueInitialize(Queue *queue);
+void showTheQueue(Queue *queue);
+//void QueueRemalloc(queueElementType **queue);
