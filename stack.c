@@ -1,6 +1,6 @@
 //this one should can been used widely
 #include</home/onfire/C/stack.h>
-void init_stack(MyStack *temp_stack){
+void initialStack(MyStack *temp_stack){
 	temp_stack->nodeArray=(node_type*)malloc(STACK_LENGTH*sizeof(node_type));
 	temp_stack->maxNodeIndexArray=(node_type*)malloc(STACK_LENGTH*sizeof(node_type));
 	temp_stack->current_position=-1;
@@ -57,9 +57,9 @@ void freeStack(MyStack *local_stack){
 void showMaxElement(MyStack *local_stack){
 	printf("%d ",maxElement(local_stack));
 }
-int main(){
+	/*
 	MyStack stack;
-	init_stack(&stack);
+	initialStack(&stack);
 	int x=5;
 	push(&stack,x);
 	push(&stack,++x);
@@ -72,4 +72,4 @@ int main(){
 //	showStack(&stack);
 	freeStack(&stack);
 //	printf("%d",stack.node[stack.current_position]);
-}
+

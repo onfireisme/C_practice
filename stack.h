@@ -10,7 +10,7 @@ typedef struct {
 	int stack_array_count;
 	int maxPosition;
 }MyStack;
-void init_stack(MyStack *temp_stack);
+void initialStack(MyStack *temp_stack);
 void push(MyStack *temp_stack,node_type node_value);
 void pop(MyStack *temp_stack);
 void reMalloc(MyStack *temp_stack);
