@@ -1,0 +1,9 @@
+#ignore all the .o files
+*.o
+#ignore all the swp files
+*.swp
+#ignore the .git file
+.git/
+#ignore the ./ ../ directory
+./
+../
