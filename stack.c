@@ -1,5 +1,5 @@
 //this one should can been used widely
-#include</home/onfire/C/stack.h>
+#include</home/wangyan/C_practice/stack.h>
 void initialStack(MyStack *temp_stack){
 	temp_stack->nodeArray=(node_type*)malloc(STACK_LENGTH*sizeof(node_type));
 	temp_stack->maxNodeIndexArray=(node_type*)malloc(STACK_LENGTH*sizeof(node_type));
@@ -10,7 +10,7 @@ void initialStack(MyStack *temp_stack){
 }
 void push(MyStack *temp_stack,node_type node_value){
 	temp_stack->nodeArray[++temp_stack->current_position]=node_value;
-	if(node_value>maxElement(temp_stack)){
+	if(node_value>maxStackElement(temp_stack)){
 		temp_stack->maxPosition++;
 		temp_stack->maxNodeIndexArray[temp_stack->maxPosition]=temp_stack->current_position;
 	}
@@ -35,7 +35,8 @@ void reMalloc(MyStack *temp_stack){
 	temp_stack->maxNodeIndexArray=(node_type *)realloc(temp_stack->maxNodeIndexArray,
 			temp_stack->stack_array_count*STACK_LENGTH*sizeof(node_type));
 }
-node_type maxElement(MyStack *temp_stack){
+//this function return the max element
+node_type maxStackElement(MyStack *temp_stack){
 	if(temp_stack->maxPosition==-1){
 		return NEGATIVE_SINGNAL;
 	}
@@ -49,13 +50,14 @@ void showStack(MyStack *temp_stack){
 	for(i;i<=temp_stack->current_position;i++){
 		printf("%d ",temp_stack->nodeArray[i]);
 	}
+	printf("\n");
 }
 void freeStack(MyStack *local_stack){
 	free(local_stack->nodeArray);
 	free(local_stack->maxNodeIndexArray);
 }
-void showMaxElement(MyStack *local_stack){
-	printf("%d ",maxElement(local_stack));
+void showMaxStackElement(MyStack *local_stack){
+	printf("%d ",maxStackElement(local_stack));
 }
 	/*
 	MyStack stack;
@@ -72,4 +74,5 @@ void showMaxElement(MyStack *local_stack){
 //	showStack(&stack);
 	freeStack(&stack);
 //	printf("%d",stack.node[stack.current_position]);
+*/
 
