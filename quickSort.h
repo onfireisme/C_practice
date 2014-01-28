@@ -14,3 +14,5 @@ typedef int NodeType;
 NodeType *globalSortArray;
 void quickSort(int beginFlag,int endFlag,NodeType *sortArray);
 void showTheArray(NodeType *sortArray,int length);
+void xorSwap(NodeType *numOne,NodeType *numTwo);
+void middleValueQuickSort(int beginFlag,int endFlag,NodeType *sortArray);
