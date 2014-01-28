@@ -1,2 +1,2 @@
-it the algorithms that I write by C
-maybe c++ in the future,but I'm not pretty sure
+its the algorithms that writen by C
+maybe by c++ in the future,but I'm not pretty sure
