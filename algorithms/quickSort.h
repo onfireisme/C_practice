@@ -16,3 +16,5 @@ void quickSort(int beginFlag,int endFlag,NodeType *sortArray);
 void showTheArray(NodeType *sortArray,int length);
 void xorSwap(NodeType *numOne,NodeType *numTwo);
 void middleValueQuickSort(int beginFlag,int endFlag,NodeType *sortArray);
+NodeType medianOfFive(NodeType *sortArray,int beginFlag);
+NodeType medianOfMedianQuickSelect(NodeType *sortArray,int selectPosition,int arrayLength);

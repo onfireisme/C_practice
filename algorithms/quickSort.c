@@ -1,4 +1,4 @@
-#include</home/wangyan/C_practice/quickSort.h>
+#include</home/wangyan/C_practice/algorithms/quickSort.h>
 /*
  * mostly ,we choose the last element as the first element to decide its
  * position
@@ -14,6 +14,11 @@
  * we choose the middle value ,the 8 is the first element that we choose to decide position
  * we replace it with the last one,then the seqence is 1,4,8,5,3
  * By prove,it reduce about 5% time consuming
+ *
+ * last solution:we call it the median of median selection algorithm which is based on the 
+ * quickselect algorithm.what's more ,it has linear time complexity for select the kth
+ * largest element.
+ * remember it ,in this algorithm, our purpose is to select kth largest number
  */
 void quickSort(int beginFlag,int endFlag,NodeType *sortArray){
 	int smallerNumberCountFlag=beginFlag-1;
@@ -23,7 +28,6 @@ void quickSort(int beginFlag,int endFlag,NodeType *sortArray){
 			countFlag++;
 		}
 		else{
-//			printf("%d\n",sortArray[countFlag]);
 			smallerNumberCountFlag++;
 			if(smallerNumberCountFlag!=countFlag){
 				xorSwap(&sortArray[smallerNumberCountFlag],
@@ -38,7 +42,6 @@ void quickSort(int beginFlag,int endFlag,NodeType *sortArray){
 	if(smallerNumberCountFlag+1<endFlag){
 		quickSort(smallerNumberCountFlag+1,endFlag,sortArray);
 	}
-//	printf("%d\n",countFlag);
 }
 void middleValueQuickSort(int beginFlag,int endFlag,NodeType *sortArray){
 	int middlePosition=(beginFlag+endFlag)/2;
@@ -60,7 +63,6 @@ void middleValueQuickSort(int beginFlag,int endFlag,NodeType *sortArray){
 			countFlag++;
 		}
 		else{
-//			printf("%d\n",sortArray[countFlag]);
 			smallerNumberCountFlag++;
 			if(smallerNumberCountFlag!=countFlag){
 				xorSwap(&sortArray[smallerNumberCountFlag],
@@ -74,6 +76,45 @@ void middleValueQuickSort(int beginFlag,int endFlag,NodeType *sortArray){
 	}
 	if(smallerNumberCountFlag+1<endFlag){
 		quickSort(smallerNumberCountFlag+1,endFlag,sortArray);
+	}
+}
+/*
+ * I don't know,if I should add the arrayLength attribute,it needs consideration
+ */
+NodeType medianOfMedianQuickSelect(NodeType *sortArray,int selectPosition,int arrayLength){
+	//first step,get the columns of array, 5 elements a row
+	int columns=arrayLength/5;
+}
+void mallocMedianArray(NodeType *medians,int columns){
+	medians=(NodeType *)malloc(sizeof(NodeType)*columns);
+}
+/*
+ * depend on the taocp, 5.3.3 it tells us 
+ * it only takes 6 comparations,but it will need at most 7 swap operations
+ */
+NodeType medianOfFive(NodeType *sortArray,int beginFlag){
+	if(sortArray[beginFlag]<sortArray[beginFlag+1]){
+		xorSwap(&sortArray[beginFlag],&sortArray[beginFlag+1]);
+	}
+	if(sortArray[beginFlag+2]<sortArray[beginFlag+3]){
+		xorSwap(&sortArray[beginFlag+2],&sortArray[beginFlag+3]);
+	}
+	if(sortArray[beginFlag]<sortArray[beginFlag+2]){
+		xorSwap(&sortArray[beginFlag],&sortArray[beginFlag+2]);
+		xorSwap(&sortArray[beginFlag+1],&sortArray[beginFlag+3]);
+	}
+	if(sortArray[beginFlag+1]<sortArray[beginFlag+4]){
+		xorSwap(&sortArray[beginFlag+1],&sortArray[beginFlag+4]);
+	}
+	if(sortArray[beginFlag+1]<sortArray[beginFlag+2]){
+		xorSwap(&sortArray[beginFlag+1],&sortArray[beginFlag+2]);
+		xorSwap(&sortArray[beginFlag+3],&sortArray[beginFlag+4]);
+	}
+	if(sortArray[beginFlag+2]<sortArray[beginFlag+4]){
+		return sortArray[beginFlag+4];
+	}
+	else{
+		return sortArray[beginFlag+2];
 	}
 }
 //we must give the address of the variable,or we cann't swap them 
@@ -91,20 +132,19 @@ void showTheArray(NodeType *sortArray,int length){
 	}
 }
 int main(void){
+	int test=11;
+	printf("%d\n",test/5);
+	/*
 	globalSortArray=(NodeType *)malloc(sizeof(NodeType)*ARRAYLENGTH);
-	globalSortArray[0]=4;
+	globalSortArray[0]=2;
 	globalSortArray[1]=3;
 	globalSortArray[2]=7;
 	globalSortArray[3]=6;
-	globalSortArray[4]=1;
-	xorSwap(&globalSortArray[0],&globalSortArray[1]);
-//	globalSortArray[5]=9;
-//	globalSortArray[6]=10;
-//	globalSortArray[7]=11;
-//	int testArray[3]={3,1,2};
-//	printf("%d",testArray);
-	middleValueQuickSort(0,4,globalSortArray);
-	showTheArray(globalSortArray,4);
+	globalSortArray[4]=8;
+	test(&globalSortArray[0]);
+//	printf("%d",medianOfFive(globalSortArray,0));
+//	showTheArray(globalSortArray,4);
 	free(globalSortArray);
+	*/
 	return 1;
 }
