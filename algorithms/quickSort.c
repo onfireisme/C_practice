@@ -20,7 +20,8 @@
  * largest element.
  * remember it ,in this algorithm, our purpose is to select kth largest number
  */
-void quickSort(int beginFlag,int endFlag,NodeType *sortArray){
+//of course ,the endFlag equal to ARRAYLENGTH-1
+void quickSortRecursion(int beginFlag,int endFlag,NodeType *sortArray){
 	int smallerNumberCountFlag=beginFlag-1;
 	int countFlag=beginFlag;
 	while(countFlag<=endFlag){
@@ -37,13 +38,16 @@ void quickSort(int beginFlag,int endFlag,NodeType *sortArray){
 		}
 	}
 	if(beginFlag<smallerNumberCountFlag-1){
-		quickSort(beginFlag,smallerNumberCountFlag-1,sortArray);
+		quickSortRecursion(beginFlag,smallerNumberCountFlag-1,sortArray);
 	}
 	if(smallerNumberCountFlag+1<endFlag){
-		quickSort(smallerNumberCountFlag+1,endFlag,sortArray);
+		quickSortRecursion(smallerNumberCountFlag+1,endFlag,sortArray);
 	}
 }
-void middleValueQuickSort(int beginFlag,int endFlag,NodeType *sortArray){
+void quickSort(NodeType *sortArray){
+	quickSortRecursion(0,ARRAYLENGTH-1,sortArray);
+}
+void middleValueQuickSortRecursion(int beginFlag,int endFlag,NodeType *sortArray){
 	int middlePosition=(beginFlag+endFlag)/2;
 	int smallerNumberCountFlag=beginFlag-1;
 	int countFlag=beginFlag;
@@ -72,27 +76,63 @@ void middleValueQuickSort(int beginFlag,int endFlag,NodeType *sortArray){
 		}
 	}
 	if(beginFlag<smallerNumberCountFlag-1){
-		quickSort(beginFlag,smallerNumberCountFlag-1,sortArray);
+		middleValueQuickSortRecursion(beginFlag,smallerNumberCountFlag-1,sortArray);
 	}
 	if(smallerNumberCountFlag+1<endFlag){
-		quickSort(smallerNumberCountFlag+1,endFlag,sortArray);
+		middleValueQuickSortRecursion(smallerNumberCountFlag+1,endFlag,sortArray);
 	}
 }
-/*
- * I don't know,if I should add the arrayLength attribute,it needs consideration
- */
-NodeType medianOfMedianQuickSelect(NodeType *sortArray,int selectPosition,int arrayLength){
-	//first step,get the columns of array, 5 elements a row
-	int columns=arrayLength/5;
+void middleValueQuickSort(NodeType *sortArray){
+	middleValueQuickSortRecursion(0,ARRAYLENGTH-1,sortArray);
 }
-void mallocMedianArray(NodeType *medians,int columns){
-	medians=(NodeType *)malloc(sizeof(NodeType)*columns);
+//for this method,we get a pivot,but we don't now ,its position..
+//So, we have to add something to make sure the partition is fine
+NodeType pivotPartition(NodeType *sortArray,NodeType pivot){
+	int countFlag=0;
+	int smallerNumberCountFlag=-1;
+	while(countFlag<ARRAYLENGTH){
+		if(sortArray[countFlag]>sortArray[endFlag]){
+			countFlag++;
+		}
+		else{
+			smallerNumberCountFlag++;
+			if(smallerNumberCountFlag!=countFlag){
+				xorSwap(&sortArray[smallerNumberCountFlag],
+						&sortArray[countFlag]);
+			}
+			countFlag++;
+		}
+	}
+
+}
+/*
+ * it seems that I have to add the arrayLength attribute to this function
+ */
+NodeType medianOfMedianQuickSelect(NodeType *sortArray,int KthNumber){
+	//first step,get the columns of array, 5 elements a row
+	int columns=getDivideUpperBound(ARRAYLENGTH,DIVIDEDNUMBER);
+	printf("%d",columns);
+	NodeType medians[columns-1];
+	int i=0;
+	//second,get all the medians
+	for(i;i<columns;i++){
+		medians[i]=medianOfFive(sortArray,i*5);
+	}
+	//then,its the most interesting part of this algorithm,we use
+	//the recursion to get the median of the array medians[]
+	int medianOfMedians=medianOfMedianQuickSelect(medians,getDivideUpperBound(columns,2);
 }
 /*
  * depend on the taocp, 5.3.3 it tells us 
- * it only takes 6 comparations,but it will need at most 7 swap operations
+ * it only takes 6 comparations,but it will need at most 7 swap operations,but the operation still
+ * only consume linear time
+ * holy shit!! I forget about the special situation!!yeah,I have to say,its not a good choice to 
+ * use this method
  */
 NodeType medianOfFive(NodeType *sortArray,int beginFlag){
+	if(beginFlag+4>ARRAYLENGTH-1){
+		return sortArray[beginFlag];
+	}
 	if(sortArray[beginFlag]<sortArray[beginFlag+1]){
 		xorSwap(&sortArray[beginFlag],&sortArray[beginFlag+1]);
 	}
@@ -125,26 +165,40 @@ void xorSwap(NodeType *numOne,NodeType *numTwo){
 	*numTwo=*numOne^*numTwo;
 	*numOne=*numOne^*numTwo;
 }
+//length is the length of the array
 void showTheArray(NodeType *sortArray,int length){
 	int i=0;
-	for(i;i<=length;i++){
-		printf("%d\n",sortArray[i]);
+	for(i;i<length;i++){
+		printf("%d ",sortArray[i]);
 	}
 }
+void generateRandomArray(NodeType *sortArray){
+	int i=0;
+	for(i;i<ARRAYLENGTH;i++){
+		sortArray[i]=random(RANDOMMAX);
+	}
+}
+//keep this function to remind that the usage of the malloc
+void mallocMedianArray(NodeType *medians,int columns){
+	medians=(NodeType *)malloc(sizeof(NodeType)*columns);
+}
+int getDivideUpperBound(int divideNumber,int dividedNumber){
+	int result;
+	if(divideNumber%dividedNumber==0){
+		result=divideNumber/dividedNumber;
+	}
+	else{
+		result=divideNumber/dividedNumber+1;
+	}
+	return result;
+}
 int main(void){
-	int test=11;
-	printf("%d\n",test/5);
-	/*
 	globalSortArray=(NodeType *)malloc(sizeof(NodeType)*ARRAYLENGTH);
-	globalSortArray[0]=2;
-	globalSortArray[1]=3;
-	globalSortArray[2]=7;
-	globalSortArray[3]=6;
-	globalSortArray[4]=8;
-	test(&globalSortArray[0]);
+	generateRandomArray(globalSortArray);
+//	showTheArray(globalSortArray,ARRAYLENGTH);
+	printf("\n");
 //	printf("%d",medianOfFive(globalSortArray,0));
-//	showTheArray(globalSortArray,4);
+	medianOfMedianQuickSelect(globalSortArray,10);
 	free(globalSortArray);
-	*/
 	return 1;
 }

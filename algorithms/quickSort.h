@@ -2,7 +2,10 @@
 #include<malloc.h>
 #define TRUE 1
 #define FALSE 0
-#define ARRAYLENGTH 1000
+#define ARRAYLENGTH 54
+#define RANDOMMAX 100
+#define random(x)(rand()%x)
+#define DIVIDEDNUMBER 5
 /* this function,recursion is much better
  */
 /*
@@ -12,9 +15,12 @@
  */
 typedef int NodeType;
 NodeType *globalSortArray;
-void quickSort(int beginFlag,int endFlag,NodeType *sortArray);
+void quickSort(NodeType *sortArray);
+void quickSortRecursion(int beginFlag,int endFlag,NodeType *sortArray);
+void middleValueQuickSortRecursion(int beginFlag,int endFlag,NodeType *sortArray);
+void middleValueQuickSort(NodeType *sortArray);
 void showTheArray(NodeType *sortArray,int length);
 void xorSwap(NodeType *numOne,NodeType *numTwo);
-void middleValueQuickSort(int beginFlag,int endFlag,NodeType *sortArray);
 NodeType medianOfFive(NodeType *sortArray,int beginFlag);
-NodeType medianOfMedianQuickSelect(NodeType *sortArray,int selectPosition,int arrayLength);
+NodeType medianOfMedianQuickSelect(NodeType *sortArray,int KthNumber);
+int getDivideUpperBound(int divideNumber,int dividedNumber);
