@@ -1,26 +1,14 @@
 #include</home/wangyan/C_practice/algorithms/quickSort.h>
 /*
- * mostly ,we choose the last element as the first element to decide its
- * position
- * however,when the elements are ordered,then the time consuming will be n square
- * can we find a better way to solve this problem?
- *
- * first solution: we choose a random element and change it with the last element
- *
- * second solution: we choose the middle value of three elements
- * they are the beginning one ,last one,and the middle one
- * for example, we have a sequence, 1,4,3,5,8
- * 1 is the beginning one ,2 is the last one, 0+4/2=2 which is 8,8 is the middle one
- * we choose the middle value ,the 8 is the first element that we choose to decide position
- * we replace it with the last one,then the seqence is 1,4,8,5,3
- * By prove,it reduce about 5% time consuming
- *
- * last solution:we call it the median of median selection algorithm which is based on the 
- * quickselect algorithm.what's more ,it has linear time complexity for select the kth
- * largest element.
- * remember it ,in this algorithm, our purpose is to select kth largest number
+ * In this file.I write three algorithms
+ * First,quick sort.Second middleValueQuickSort
+ * The last one ,median of medians quick select
  */
-//of course ,the endFlag equal to ARRAYLENGTH-1
+/*
+ * some defination of this function, in case that I forget it
+ * the beginFlag equal to the first element of array,at first,equal to 0
+ * end equal to the last element of the array,at first ,equal to ARRAYLENGTH-1
+ */
 void quickSortRecursion(int beginFlag,int endFlag,NodeType *sortArray){
 	int smallerNumberCountFlag=beginFlag-1;
 	int countFlag=beginFlag;
@@ -85,13 +73,12 @@ void middleValueQuickSortRecursion(int beginFlag,int endFlag,NodeType *sortArray
 void middleValueQuickSort(NodeType *sortArray){
 	middleValueQuickSortRecursion(0,ARRAYLENGTH-1,sortArray);
 }
-//for this method,we get a pivot,but we don't now ,its position..
-//So, we have to add something to make sure the partition is fine
-NodeType pivotPartition(NodeType *sortArray,NodeType pivot){
-	int countFlag=0;
-	int smallerNumberCountFlag=-1;
-	while(countFlag<ARRAYLENGTH){
-		if(sortArray[countFlag]>sortArray[endFlag]){
+//this function is based on the quickSort,but have different with it
+NodeType pivotPartition(NodeType *sortArray,NodeType pivot,int beginFlag,int endFlag){
+	int countFlag=beginFlag;
+	int smallerNumberCountFlag=beginFlag-1;
+	while(countFlag<=endFlag){
+		if(sortArray[countFlag]>pivot){
 			countFlag++;
 		}
 		else{
@@ -103,24 +90,26 @@ NodeType pivotPartition(NodeType *sortArray,NodeType pivot){
 			countFlag++;
 		}
 	}
-
 }
 /*
- * it seems that I have to add the arrayLength attribute to this function
+ * The beginFlag,endFlag attribute are both very important,as the begin and the end of the array
+ * always change,so we have to add it
  */
-NodeType medianOfMedianQuickSelect(NodeType *sortArray,int KthNumber){
+int medianOfMedianQuickSelect(NodeType *sortArray,int beginFlag,int endFlag,int KthNumber){
 	//first step,get the columns of array, 5 elements a row
-	int columns=getDivideUpperBound(ARRAYLENGTH,DIVIDEDNUMBER);
-	printf("%d",columns);
+	arrayLength=endFlag-beginFlag+1;
+	int columns=getDivideUpperBound(arrayLength,DIVIDEDNUMBER);
 	NodeType medians[columns-1];
 	int i=0;
 	//second,get all the medians
 	for(i;i<columns;i++){
-		medians[i]=medianOfFive(sortArray,i*5);
+		medians[i]=medianOfFive(sortArray,beginFlag+i*5,arrayLength);
 	}
 	//then,its the most interesting part of this algorithm,we use
 	//the recursion to get the median of the array medians[]
-	int medianOfMedians=medianOfMedianQuickSelect(medians,getDivideUpperBound(columns,2);
+	int medianOfMediansPosition=medianOfMedianQuickSelect(medians,0,columns-1,
+			getDivideUpperBound(columns,2));
+	pivotPartition(sortArray,medians[medianOfMediansPosition],beginFlag,endFlag);
 }
 /*
  * depend on the taocp, 5.3.3 it tells us 
@@ -129,8 +118,8 @@ NodeType medianOfMedianQuickSelect(NodeType *sortArray,int KthNumber){
  * holy shit!! I forget about the special situation!!yeah,I have to say,its not a good choice to 
  * use this method
  */
-NodeType medianOfFive(NodeType *sortArray,int beginFlag){
-	if(beginFlag+4>ARRAYLENGTH-1){
+NodeType medianOfFive(NodeType *sortArray,int beginFlag,int arrayLength){
+	if(beginFlag+5>arrayLength){
 		return sortArray[beginFlag];
 	}
 	if(sortArray[beginFlag]<sortArray[beginFlag+1]){

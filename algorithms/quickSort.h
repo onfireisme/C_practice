@@ -22,5 +22,5 @@ void middleValueQuickSort(NodeType *sortArray);
 void showTheArray(NodeType *sortArray,int length);
 void xorSwap(NodeType *numOne,NodeType *numTwo);
 NodeType medianOfFive(NodeType *sortArray,int beginFlag);
-NodeType medianOfMedianQuickSelect(NodeType *sortArray,int KthNumber);
+int medianOfMedianQuickSelect(NodeType *sortArray,int KthNumber);
 int getDivideUpperBound(int divideNumber,int dividedNumber);
