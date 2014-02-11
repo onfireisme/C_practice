@@ -2,7 +2,7 @@
 #include<malloc.h>
 #define TRUE 1
 #define FALSE 0
-#define ARRAYLENGTH 12
+#define ARRAYLENGTH 13
 #define RANDOMMAX 100
 #define random(x)(rand()%x)
 #define DIVIDEDNUMBER 5

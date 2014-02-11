@@ -10,21 +10,21 @@
  * end equal to the last element of the array,at first ,equal to ARRAYLENGTH-1
  */
 void quickSortRecursion(int beginFlag,int endFlag,NodeType *sortArray){
-	int smallerNumberCountFlag=beginFlag-1;
+	int smallerNumberCountFlag=beginFlag;
 	int countFlag=beginFlag;
-	while(countFlag<=endFlag){
-		if(sortArray[countFlag]>sortArray[endFlag]){
+	while(countFlag<endFlag){
+		if(sortArray[countFlag]<sortArray[endFlag]){
+			xorSwap(&sortArray[smallerNumberCountFlag],
+					&sortArray[countFlag]);
+			smallerNumberCountFlag++;
 			countFlag++;
 		}
 		else{
-			smallerNumberCountFlag++;
-			if(smallerNumberCountFlag!=countFlag){
-				xorSwap(&sortArray[smallerNumberCountFlag],
-						&sortArray[countFlag]);
-			}
 			countFlag++;
 		}
 	}
+	xorSwap(&sortArray[smallerNumberCountFlag],&sortArray[endFlag]);
+
 	if(beginFlag<smallerNumberCountFlag-1){
 		quickSortRecursion(beginFlag,smallerNumberCountFlag-1,sortArray);
 	}
@@ -73,13 +73,13 @@ void middleValueQuickSortRecursion(int beginFlag,int endFlag,NodeType *sortArray
 void middleValueQuickSort(NodeType *sortArray){
 	middleValueQuickSortRecursion(0,ARRAYLENGTH-1,sortArray);
 }
-void quickSelectSmallestNumber(NodeType *sortArray,int beginFlag,int endFlag,int KthNumber){
+NodeType quickSelectSmallestNumber(NodeType *sortArray,int beginFlag,int endFlag,int KthNumber){
 	int countFlag=beginFlag;
 	int smallerNumberCountFlag=beginFlag-1;
 	while(countFlag<endFlag){
 		if(sortArray[countFlag]<sortArray[endFlag]){
 			smallerNumberCountFlag++;
-			xorSwap(sortArray[smallerNumberCountFlag],sortArray[countFlag]);
+			xorSwap(&sortArray[smallerNumberCountFlag],&sortArray[countFlag]);
 			countFlag++;
 		}
 		else{
@@ -196,9 +196,12 @@ NodeType medianOfFive(NodeType *sortArray,int beginFlag,int arrayLength){
 	}
 }
 void xorSwap(NodeType *numOne,NodeType *numTwo){
-	*numOne=*numOne^*numTwo;
-	*numTwo=*numOne^*numTwo;
-	*numOne=*numOne^*numTwo;
+	if(numOne==numTwo){
+		return;
+	}
+	*numOne=(*numOne)^(*numTwo);
+	*numTwo=(*numOne)^(*numTwo);
+	*numOne=(*numOne)^(*numTwo);
 }
 //length is the length of the array
 void showTheArray(NodeType *sortArray,int length){
@@ -233,12 +236,13 @@ int printNum(int number){
 int main(void){
 	globalSortArray=(NodeType *)malloc(sizeof(NodeType)*ARRAYLENGTH);
 	generateRandomArray(globalSortArray);
-//	showTheArray(globalSortArray,ARRAYLENGTH);
-//	printf("\n");
+	showTheArray(globalSortArray,ARRAYLENGTH);
+	printf("\n");
 //	printf("%d",pivotPartition(globalSortArray,50,0,ARRAYLENGTH-1));
-	medianOfMediansQuickSelect(globalSortArray,10);
+//	medianOfMediansQuickSelect(globalSortArray,10);
+	quickSort(globalSortArray);
 //	printf("\n");
-//	showTheArray(globalSortArray,ARRAYLENGTH);
+	showTheArray(globalSortArray,ARRAYLENGTH);
 	free(globalSortArray);
 	return 1;
 }
