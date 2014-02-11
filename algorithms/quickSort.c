@@ -73,12 +73,35 @@ void middleValueQuickSortRecursion(int beginFlag,int endFlag,NodeType *sortArray
 void middleValueQuickSort(NodeType *sortArray){
 	middleValueQuickSortRecursion(0,ARRAYLENGTH-1,sortArray);
 }
-//this function is based on the quickSort,but have different with it
-NodeType pivotPartition(NodeType *sortArray,NodeType pivot,int beginFlag,int endFlag){
+void quickSelectSmallestNumber(NodeType *sortArray,int beginFlag,int endFlag,int KthNumber){
+	int countFlag=beginFlag;
+	int smallerNumberCountFlag=beginFlag-1;
+	while(countFlag<endFlag){
+		if(sortArray[countFlag]<sortArray[endFlag]){
+			smallerNumberCountFlag++;
+			xorSwap(sortArray[smallerNumberCountFlag],sortArray[countFlag]);
+			countFlag++;
+		}
+		else{
+			countFlag++;
+		}
+	}
+	//as I have to take care of the situation that two equal values exist,so I have to 
+	//switch the last to the smallerNumberCountFlag+1,
+	//notice!!when smallerNumberCountFlag=1,it means that we have
+	if(smallerNumberCountFlag+1==KthNumber){
+		return sortArray[beginFlag+smallerNumberCountFlag-1];
+	}
+	if(smallerNumberCountFlag+1>KthNumber){
+	}
+	if(smallerNumberCountFlag+1<KthNumber){
+	}
+}
+int pivotPartition(NodeType *sortArray,NodeType pivot,int beginFlag,int endFlag){
 	int countFlag=beginFlag;
 	int smallerNumberCountFlag=beginFlag-1;
 	while(countFlag<=endFlag){
-		if(sortArray[countFlag]>pivot){
+		if(sortArray[countFlag]>=pivot){
 			countFlag++;
 		}
 		else{
@@ -90,14 +113,26 @@ NodeType pivotPartition(NodeType *sortArray,NodeType pivot,int beginFlag,int end
 			countFlag++;
 		}
 	}
+	//holy shit!I forget that I define the 0 euqal to 1,at this place
+	return smallerNumberCountFlag+1;
 }
-/*
- * The beginFlag,endFlag attribute are both very important,as the begin and the end of the array
- * always change,so we have to add it
- */
-int medianOfMedianQuickSelect(NodeType *sortArray,int beginFlag,int endFlag,int KthNumber){
+//fuck!! I have make a stupid mistake,every recursion should have stop conditon,I cann't
+//believe I just write a algorithm without stop condition!!
+//
+NodeType medianOfMediansQuickSelectRecursion(NodeType *sortArray,int beginFlag,int endFlag,
+		int KthNumber){
+	//why I add a situation that,when the length of the array is smaller than 5,
+	//then I just use the sortselect ,return the value that we want,because,as you know,when the number is
+	//smaller ,then quickselect is acceptable!
+	if(endFlag==beginFlag){
+		return sortArray[endFlag];
+	}
+	if(beginFlag>endFlag){
+		printf("wrong");
+		return 0;
+	}
 	//first step,get the columns of array, 5 elements a row
-	arrayLength=endFlag-beginFlag+1;
+	int arrayLength=endFlag-beginFlag+1;
 	int columns=getDivideUpperBound(arrayLength,DIVIDEDNUMBER);
 	NodeType medians[columns-1];
 	int i=0;
@@ -105,23 +140,37 @@ int medianOfMedianQuickSelect(NodeType *sortArray,int beginFlag,int endFlag,int 
 	for(i;i<columns;i++){
 		medians[i]=medianOfFive(sortArray,beginFlag+i*5,arrayLength);
 	}
+	showTheArray(medians,columns);
+	/*
 	//then,its the most interesting part of this algorithm,we use
 	//the recursion to get the median of the array medians[]
-	int medianOfMediansPosition=medianOfMedianQuickSelect(medians,0,columns-1,
+	NodeType medianOfMedians=medianOfMediansQuickSelectRecursion(medians,0,columns-1,
 			getDivideUpperBound(columns,2));
-	pivotPartition(sortArray,medians[medianOfMediansPosition],beginFlag,endFlag);
+	int smallerNumber=pivotPartition(sortArray,medianOfMedians,beginFlag,endFlag);
+	printf("smaller number is %d",smallerNumber);
+	printf("\n");
+	if(smallerNumber==KthNumber){
+		return medianOfMedians;
+	}
+	if(smallerNumber>KthNumber){
+		return medianOfMediansQuickSelectRecursion(sortArray,beginFlag,smallerNumber-1,KthNumber);
+	}
+	else{
+		return medianOfMediansQuickSelectRecursion(sortArray,smallerNumber-1,endFlag,
+				KthNumber-smallerNumber);
+	}
+	*/
 }
-/*
- * depend on the taocp, 5.3.3 it tells us 
- * it only takes 6 comparations,but it will need at most 7 swap operations,but the operation still
- * only consume linear time
- * holy shit!! I forget about the special situation!!yeah,I have to say,its not a good choice to 
- * use this method
- */
+NodeType medianOfMediansQuickSelect(NodeType *sortArray,int KthNumber){
+	medianOfMediansQuickSelectRecursion(sortArray,0,ARRAYLENGTH-1,KthNumber);
+}
 NodeType medianOfFive(NodeType *sortArray,int beginFlag,int arrayLength){
 	if(beginFlag+5>arrayLength){
-		return sortArray[beginFlag];
+		quickSortRecursion(beginFlag,arrayLength-1,sortArray);
+		int median=getDivideUpperBound(arrayLength-beginFlag,MIDDLE);
+		return sortArray[median+beginFlag-1];
 	}
+	//below is the normal situation
 	if(sortArray[beginFlag]<sortArray[beginFlag+1]){
 		xorSwap(&sortArray[beginFlag],&sortArray[beginFlag+1]);
 	}
@@ -146,9 +195,6 @@ NodeType medianOfFive(NodeType *sortArray,int beginFlag,int arrayLength){
 		return sortArray[beginFlag+2];
 	}
 }
-//we must give the address of the variable,or we cann't swap them 
-//even if they belong to the array,it will be fine,because of the defination of the array
-//you just need to send the address of the value which belong to this array is ok.
 void xorSwap(NodeType *numOne,NodeType *numTwo){
 	*numOne=*numOne^*numTwo;
 	*numTwo=*numOne^*numTwo;
@@ -181,13 +227,18 @@ int getDivideUpperBound(int divideNumber,int dividedNumber){
 	}
 	return result;
 }
+int printNum(int number){
+	printf("%d ",number);
+}
 int main(void){
 	globalSortArray=(NodeType *)malloc(sizeof(NodeType)*ARRAYLENGTH);
 	generateRandomArray(globalSortArray);
 //	showTheArray(globalSortArray,ARRAYLENGTH);
-	printf("\n");
-//	printf("%d",medianOfFive(globalSortArray,0));
-	medianOfMedianQuickSelect(globalSortArray,10);
+//	printf("\n");
+//	printf("%d",pivotPartition(globalSortArray,50,0,ARRAYLENGTH-1));
+	medianOfMediansQuickSelect(globalSortArray,10);
+//	printf("\n");
+//	showTheArray(globalSortArray,ARRAYLENGTH);
 	free(globalSortArray);
 	return 1;
 }
