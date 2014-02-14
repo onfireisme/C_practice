@@ -5,12 +5,21 @@
  * The last one ,median of medians quick select
  */
 /*
- * some defination of this function, in case that I forget it
- * the beginFlag equal to the first element of array,at first,equal to 0
- * end equal to the last element of the array,at first ,equal to ARRAYLENGTH-1
+ * Definition
+ * 1 beginFlag
+ * equal to the first element of the array,at the beginning,it always equal to 0
+ * 2 endFlag
+ * endFlag equal to the last element of the array.
+ * at the beginning, it always equal to ARRAYLENGTH-1 
+ * 3 KthSmallestNumber
+ * if it euqal to 10,then it means that 9 numbers are smaller than it.
+ * 4 smallerNumberCountFlag
+ * it means that the numbers that smaller than the pivot
  */
 void quickSortRecursion(int beginFlag,int endFlag,NodeType *sortArray){
 	int smallerNumberCountFlag=beginFlag;
+	//when the smallerNumberCountFlag is 10,it means that we do have
+	//10 numbers smaller it
 	int countFlag=beginFlag;
 	while(countFlag<endFlag){
 		if(sortArray[countFlag]<sortArray[endFlag]){
@@ -23,6 +32,8 @@ void quickSortRecursion(int beginFlag,int endFlag,NodeType *sortArray){
 			countFlag++;
 		}
 	}
+	//in fact,I really don't want to add this line,however,if I consider the 
+	//special situation that have too values are equal 
 	xorSwap(&sortArray[smallerNumberCountFlag],&sortArray[endFlag]);
 
 	if(beginFlag<smallerNumberCountFlag-1){
@@ -73,28 +84,52 @@ void middleValueQuickSortRecursion(int beginFlag,int endFlag,NodeType *sortArray
 void middleValueQuickSort(NodeType *sortArray){
 	middleValueQuickSortRecursion(0,ARRAYLENGTH-1,sortArray);
 }
-NodeType quickSelectSmallestNumber(NodeType *sortArray,int beginFlag,int endFlag,int KthNumber){
+NodeType quickSelectSmallestNumberRecursion(NodeType *sortArray,int beginFlag,
+		int endFlag,int KthSmallestNumber){
+	//the special condition that when
+	if(KthSmallestNumber>endFlag-beginFlag+1){
+		showTheArray(sortArray,ARRAYLENGTH);
+		printf("beginFlag is%d endFlagis %d Kth is %d",beginFlag,endFlag,KthSmallestNumber); 
+		printf("the array length is not enough long");
+		return 0;
+	}
 	int countFlag=beginFlag;
-	int smallerNumberCountFlag=beginFlag-1;
+	int smallerNumberCountFlag=beginFlag;
 	while(countFlag<endFlag){
 		if(sortArray[countFlag]<sortArray[endFlag]){
-			smallerNumberCountFlag++;
 			xorSwap(&sortArray[smallerNumberCountFlag],&sortArray[countFlag]);
+			smallerNumberCountFlag++;
 			countFlag++;
 		}
 		else{
 			countFlag++;
 		}
 	}
-	//as I have to take care of the situation that two equal values exist,so I have to 
-	//switch the last to the smallerNumberCountFlag+1,
-	//notice!!when smallerNumberCountFlag=1,it means that we have
-	if(smallerNumberCountFlag+1==KthNumber){
-		return sortArray[beginFlag+smallerNumberCountFlag-1];
+	/*
+	 *NOTICE!!!
+	 *because of recursion ,the smaller number will soon be different with 
+	 *the smallerNumberCountFlag
+	 */
+	int smallerNumber=smallerNumberCountFlag-beginFlag;
+	xorSwap(&sortArray[smallerNumberCountFlag],&sortArray[endFlag]);
+	if(smallerNumber+1==KthSmallestNumber){
+		return sortArray[smallerNumberCountFlag];
 	}
-	if(smallerNumberCountFlag+1>KthNumber){
+	if(smallerNumber>=KthSmallestNumber){
+		if(beginFlag>smallerNumberCountFlag){
+			printf("wrong");
+			return 0;
+		}
+		return quickSelectSmallestNumberRecursion(sortArray,beginFlag,smallerNumberCountFlag-1,
+				KthSmallestNumber);
 	}
-	if(smallerNumberCountFlag+1<KthNumber){
+	else{
+		if(smallerNumberCountFlag>endFlag){
+			printf("wrong");
+			return 0;
+		}
+		return quickSelectSmallestNumberRecursion(sortArray,smallerNumberCountFlag,endFlag,
+				KthSmallestNumber-smallerNumber);
 	}
 }
 int pivotPartition(NodeType *sortArray,NodeType pivot,int beginFlag,int endFlag){
@@ -209,6 +244,7 @@ void showTheArray(NodeType *sortArray,int length){
 	for(i;i<length;i++){
 		printf("%d ",sortArray[i]);
 	}
+	printf("\n");
 }
 void generateRandomArray(NodeType *sortArray){
 	int i=0;
@@ -234,14 +270,13 @@ int printNum(int number){
 	printf("%d ",number);
 }
 int main(void){
-	globalSortArray=(NodeType *)malloc(sizeof(NodeType)*ARRAYLENGTH);
+	if(ARRAYLENGTH!=0){
+		globalSortArray=(NodeType *)malloc(sizeof(NodeType)*ARRAYLENGTH);
+	}
 	generateRandomArray(globalSortArray);
 	showTheArray(globalSortArray,ARRAYLENGTH);
 	printf("\n");
-//	printf("%d",pivotPartition(globalSortArray,50,0,ARRAYLENGTH-1));
-//	medianOfMediansQuickSelect(globalSortArray,10);
-	quickSort(globalSortArray);
-//	printf("\n");
+	printf("final result is %d\n",quickSelectSmallestNumberRecursion(globalSortArray,0,ARRAYLENGTH-1,6));
 	showTheArray(globalSortArray,ARRAYLENGTH);
 	free(globalSortArray);
 	return 1;
