@@ -88,8 +88,6 @@ NodeType quickSelectSmallestNumberRecursion(NodeType *sortArray,int beginFlag,
 		int endFlag,int KthSmallestNumber){
 	//the special condition that when
 	if(KthSmallestNumber>endFlag-beginFlag+1){
-		showTheArray(sortArray,ARRAYLENGTH);
-		printf("beginFlag is%d endFlagis %d Kth is %d",beginFlag,endFlag,KthSmallestNumber); 
 		printf("the array length is not enough long");
 		return 0;
 	}
@@ -133,33 +131,45 @@ NodeType quickSelectSmallestNumberRecursion(NodeType *sortArray,int beginFlag,
 	}
 }
 int pivotPartition(NodeType *sortArray,NodeType pivot,int beginFlag,int endFlag){
+	if(beginFlag==endFlag){
+		return 0;
+	}
 	int countFlag=beginFlag;
-	int smallerNumberCountFlag=beginFlag-1;
+	int smallerNumberCountFlag=beginFlag;
+	//BOOL pivotDetect=FALSE;
 	while(countFlag<=endFlag){
-		if(sortArray[countFlag]>=pivot){
+		if(sortArray[countFlag]<pivot){
+			xorSwap(&sortArray[smallerNumberCountFlag],&sortArray[countFlag]);
+			smallerNumberCountFlag++;
 			countFlag++;
 		}
-		else{
-			smallerNumberCountFlag++;
-			if(smallerNumberCountFlag!=countFlag){
-				xorSwap(&sortArray[smallerNumberCountFlag],
-						&sortArray[countFlag]);
+		/*
+		else if(sortArray[countFlag]==pivot){
+			pivotDetect=TRUE;
+			if(countFlag!=endFlag){
+				xorSwap(sortArray[countFlag],sortArray[endFlag]);
 			}
+			else{
+				countFlag++;
+			}
+		}
+		*/
+		else{
 			countFlag++;
 		}
 	}
-	//holy shit!I forget that I define the 0 euqal to 1,at this place
-	return smallerNumberCountFlag+1;
+	/*
+	if(pivotDetect!=TRUE){
+		printf("could not find the pivot");
+		return 0;
+	}
+	*/
+	int smallerNumber=smallerNumberCountFlag-beginFlag;
+	return smallerNumber;
 }
-//fuck!! I have make a stupid mistake,every recursion should have stop conditon,I cann't
-//believe I just write a algorithm without stop condition!!
-//
 NodeType medianOfMediansQuickSelectRecursion(NodeType *sortArray,int beginFlag,int endFlag,
 		int KthNumber){
-	//why I add a situation that,when the length of the array is smaller than 5,
-	//then I just use the sortselect ,return the value that we want,because,as you know,when the number is
-	//smaller ,then quickselect is acceptable!
-	if(endFlag==beginFlag){
+	if(beginFlag==endFlag){
 		return sortArray[endFlag];
 	}
 	if(beginFlag>endFlag){
@@ -175,26 +185,33 @@ NodeType medianOfMediansQuickSelectRecursion(NodeType *sortArray,int beginFlag,i
 	for(i;i<columns;i++){
 		medians[i]=medianOfFive(sortArray,beginFlag+i*5,arrayLength);
 	}
+	printf("columns is %d\n",columns);
 	showTheArray(medians,columns);
-	/*
-	//then,its the most interesting part of this algorithm,we use
-	//the recursion to get the median of the array medians[]
-	NodeType medianOfMedians=medianOfMediansQuickSelectRecursion(medians,0,columns-1,
-			getDivideUpperBound(columns,2));
-	int smallerNumber=pivotPartition(sortArray,medianOfMedians,beginFlag,endFlag);
-	printf("smaller number is %d",smallerNumber);
-	printf("\n");
-	if(smallerNumber==KthNumber){
-		return medianOfMedians;
-	}
-	if(smallerNumber>KthNumber){
-		return medianOfMediansQuickSelectRecursion(sortArray,beginFlag,smallerNumber-1,KthNumber);
+	showTheArray(medians,columns);
+	//the recursion..If I use the recursion here ,then I need to set a stop condition
+	//at the begin of the function,or,the recursion will never stop
+	NodeType medianOfMedians;
+	if(columns>1){
+		medianOfMedians=medianOfMediansQuickSelectRecursion(medians,0,columns-1,
+				getDivideUpperBound(columns,2));
 	}
 	else{
-		return medianOfMediansQuickSelectRecursion(sortArray,smallerNumber-1,endFlag,
-				KthNumber-smallerNumber);
+		medianOfMedians=medians[0];
 	}
-	*/
+	int smallerNumber=pivotPartition(sortArray,medianOfMedians,beginFlag,endFlag);
+	printf("beginFlag is%d endFlag is%d smaller number is %d  KthNumber is%d medianOfMedians is %d\n",
+			beginFlag,endFlag,smallerNumber,KthNumber,medianOfMedians);
+	if(smallerNumber+1==KthNumber){
+		return medianOfMedians;
+	}
+	if(smallerNumber>=KthNumber){
+		return medianOfMediansQuickSelectRecursion(sortArray,beginFlag,
+				smallerNumber+beginFlag-1,KthNumber);
+	}
+	else{
+		return medianOfMediansQuickSelectRecursion(sortArray,smallerNumber+beginFlag,
+				endFlag,KthNumber-smallerNumber);
+	}
 }
 NodeType medianOfMediansQuickSelect(NodeType *sortArray,int KthNumber){
 	medianOfMediansQuickSelectRecursion(sortArray,0,ARRAYLENGTH-1,KthNumber);
@@ -246,6 +263,13 @@ void showTheArray(NodeType *sortArray,int length){
 	}
 	printf("\n");
 }
+void showTheArrayWithEnd(NodeType *sortArray,int beginFlag,int endFlag){
+	int i=beginFlag;
+	for(i;i<=endFlag;i++){
+		printf("%d",sortArray[i]);
+	}
+	printf("\n");
+}
 void generateRandomArray(NodeType *sortArray){
 	int i=0;
 	for(i;i<ARRAYLENGTH;i++){
@@ -266,18 +290,21 @@ int getDivideUpperBound(int divideNumber,int dividedNumber){
 	}
 	return result;
 }
-int printNum(int number){
-	printf("%d ",number);
-}
 int main(void){
 	if(ARRAYLENGTH!=0){
 		globalSortArray=(NodeType *)malloc(sizeof(NodeType)*ARRAYLENGTH);
 	}
-	generateRandomArray(globalSortArray);
+//	generateRandomArray(globalSortArray);
+	globalSortArray[0]=5;
+	globalSortArray[1]=2;
+	globalSortArray[2]=3;
+	globalSortArray[3]=6;
+	globalSortArray[4]=3;
 	showTheArray(globalSortArray,ARRAYLENGTH);
 	printf("\n");
-	printf("final result is %d\n",quickSelectSmallestNumberRecursion(globalSortArray,0,ARRAYLENGTH-1,6));
-	showTheArray(globalSortArray,ARRAYLENGTH);
+//	printf("%d",pivotPartition(globalSortArray,3,0,3));
+//	printf("%d\n",medianOfMediansQuickSelectRecursion(globalSortArray,0,ARRAYLENGTH-1,7));
+	printf("%d\n",quickSelectSmallestNumberRecursion(globalSortArray,0,4,3));
 	free(globalSortArray);
 	return 1;
 }
