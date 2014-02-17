@@ -86,6 +86,11 @@ void middleValueQuickSort(NodeType *sortArray){
 }
 NodeType quickSelectSmallestNumberRecursion(NodeType *sortArray,int beginFlag,
 		int endFlag,int KthSmallestNumber){
+	/*
+	 *那就是，值重复的问题。pivot的位置是由smallerNumber决定的
+	 *这样就导致，你只能求比它小的数，有多少，但小的数里面，是否有重复，你就无法决定了
+	 *况且，这样还是有问题
+	 */
 	//the special condition that when
 	if(KthSmallestNumber>endFlag-beginFlag+1){
 		printf("the array length is not enough long");
@@ -94,7 +99,7 @@ NodeType quickSelectSmallestNumberRecursion(NodeType *sortArray,int beginFlag,
 	int countFlag=beginFlag;
 	int smallerNumberCountFlag=beginFlag;
 	while(countFlag<endFlag){
-		if(sortArray[countFlag]<sortArray[endFlag]){
+		if(sortArray[countFlag]<=sortArray[endFlag]){
 			xorSwap(&sortArray[smallerNumberCountFlag],&sortArray[countFlag]);
 			smallerNumberCountFlag++;
 			countFlag++;
@@ -103,17 +108,17 @@ NodeType quickSelectSmallestNumberRecursion(NodeType *sortArray,int beginFlag,
 			countFlag++;
 		}
 	}
-	/*
-	 *NOTICE!!!
-	 *because of recursion ,the smaller number will soon be different with 
-	 *the smallerNumberCountFlag
-	 */
 	int smallerNumber=smallerNumberCountFlag-beginFlag;
 	xorSwap(&sortArray[smallerNumberCountFlag],&sortArray[endFlag]);
 	if(smallerNumber+1==KthSmallestNumber){
 		return sortArray[smallerNumberCountFlag];
 	}
 	if(smallerNumber>=KthSmallestNumber){
+		printf("one");
+		showTheArray(sortArray,ARRAYLENGTH);
+		printf("smallerNumber is %d beginFlag is %d endFlag is %d KthSmallestNumber is %d\n",
+				smallerNumber,beginFlag,endFlag,KthSmallestNumber);
+		printf("\n");
 		if(beginFlag>smallerNumberCountFlag){
 			printf("wrong");
 			return 0;
@@ -122,6 +127,11 @@ NodeType quickSelectSmallestNumberRecursion(NodeType *sortArray,int beginFlag,
 				KthSmallestNumber);
 	}
 	else{
+		printf("two");
+		showTheArray(sortArray,ARRAYLENGTH);
+		printf("smallerNumber is %d beginFlag is %d endFlag is %d KthSmallestNumber is %d\n",
+				smallerNumber,beginFlag,endFlag,KthSmallestNumber);
+		printf("\n");
 		if(smallerNumberCountFlag>endFlag){
 			printf("wrong");
 			return 0;
@@ -291,20 +301,18 @@ int getDivideUpperBound(int divideNumber,int dividedNumber){
 	return result;
 }
 int main(void){
-	if(ARRAYLENGTH!=0){
+	if(ARRAYLENGTH>0){
 		globalSortArray=(NodeType *)malloc(sizeof(NodeType)*ARRAYLENGTH);
 	}
-//	generateRandomArray(globalSortArray);
-	globalSortArray[0]=5;
-	globalSortArray[1]=2;
-	globalSortArray[2]=3;
-	globalSortArray[3]=6;
-	globalSortArray[4]=3;
+	else{
+		printf("error,the arraylength should larger than 1");
+	}
+	generateRandomArray(globalSortArray);
 	showTheArray(globalSortArray,ARRAYLENGTH);
 	printf("\n");
 //	printf("%d",pivotPartition(globalSortArray,3,0,3));
 //	printf("%d\n",medianOfMediansQuickSelectRecursion(globalSortArray,0,ARRAYLENGTH-1,7));
-	printf("%d\n",quickSelectSmallestNumberRecursion(globalSortArray,0,4,3));
+	printf("%d\n",quickSelectSmallestNumberRecursion(globalSortArray,0,ARRAYLENGTH-1,4));
 	free(globalSortArray);
 	return 1;
 }

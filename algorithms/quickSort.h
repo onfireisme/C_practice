@@ -9,6 +9,7 @@
 #define MIDDLE 2
 #define SMALL 0
 #define BIG 1
+#define LOOPCOUNTMAX 10
 typedef int NodeType;
 typedef int BOOL;
 NodeType *globalSortArray;
