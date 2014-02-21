@@ -1,4 +1,4 @@
-#include</home/wangyan/C_practice/binary_heap.h>
+#include</home/wangyan/C_practice/dataStructure/binary_heap.h>
 void initialHeap(Heap *localHeap){
 	localHeap->nodeArray=(NodeType *)malloc(sizeof(NodeType)*HEAPLENGTH);
 	localHeap->lastNodePosition=0;

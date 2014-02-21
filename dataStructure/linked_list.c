@@ -1,4 +1,4 @@
-#include</home/wangyan/C/linked_list.h>
+#include</home/wangyan/C_practice/dataStructure/linked_list.h>
 //问题原因终于找到了，我把链表整的太复杂了。。
 //不过，其实可以加一个list类的，这样会省去很多的麻烦事情，长度，不过关于头节点，尾部节点
 //不的不说，创建一个哨兵节点比创建一个头节点，尾节点，要省去很多事情，不用加那么多的条件限制
@@ -63,7 +63,6 @@ void free_node(list_node *guard_node){
 		local_next_node=local_next_node->next_node;
 		free(free_node);
 	}
-
 }
 int main(){
 	list_node guard_node; 
