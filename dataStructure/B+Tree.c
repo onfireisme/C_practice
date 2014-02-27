@@ -59,6 +59,9 @@ BTreeNode *splitNode(BTreeNode *node){
 		fatherNode->childNodePointerArray[++(fatherNode->pointerCurrentIndex)]
 			=node;
 		positionAtFatherNode=node->positionAtFatherNode;
+		//set the rightBrotherNode
+		newRootNode->rightBrotherNode=NULL;
+		node->rightBrotherNode=newRootNode;
 	}
 	//then when the node is not root node
 	if(node->nodeType==LEAF){
@@ -71,9 +74,15 @@ BTreeNode *splitNode(BTreeNode *node){
 		node->pointerCurrentIndex=DEGREE-1;
 		newNode->pointerCurrentIndex=DEGREE-1;
 	}
-	//rightBrotherNode
-	newNode->rightBrotherNode=NULL;
-	node->rightBrotherNode=newNode;
+	//set the rightBrotherNode
+	if(node->rightBrotherNode==NULL){
+		newNode->rightBrotherNode=NULL;
+		node->rightBrotherNode=newNode;
+	}
+	else{
+		newNode->rightBrotherNode=node->rightBrotherNode;
+		node->rightBrotherNode=newNode;
+	}
 	//insert the key value to the father node
 	KeyType insertedKeyValue=node->keyValueArray[DEGREE-1];
 	specifiedKeyValueInsert(fatherNode,positionAtFatherNode-1,
@@ -101,6 +110,7 @@ void BTreeInsert(BTreeNode *rootNode,KeyType keyValue){
 		//the special case,that we don't have the fisrt 
 		BTreeNode *newNode;
 		initialNode(&newNode,rootNode,LEAF,0);
+		newNode->rightBrotherNode=NULL;
 		keyValueInsert(newNode,keyValue);
 		return;
 	}
@@ -262,6 +272,33 @@ void showThePointerArray(BTreeNode *node){
 	}
 	printf("\n");
 }
+void showTheTreeByLevel(BTreeNode *rootNode){
+	int levelCount=1;
+	int nodeCount=1;
+	BTreeNode *node=rootNode;
+	BTreeNode *tempNode;
+	printf("the unleaf key value\n");
+	while(node->nodeType==UNLEAF){
+		tempNode=node->childNodePointerArray[0];
+		nodeCount=1;
+		while(node!=NULL){
+			printf("the %d node of level %d\n",nodeCount,levelCount);
+			showTheKeyValueArray(node);
+			node=node->rightBrotherNode;
+			nodeCount++;
+		}
+		node=tempNode;
+		levelCount++;
+	}
+	printf("the leaf key value\n");
+	nodeCount=1;
+	while(node!=NULL){
+		printf("the %d node \n",nodeCount);
+		showTheKeyValueArray(node);
+		node=node->rightBrotherNode;
+		nodeCount++;
+	}
+}
 void generateRandomIntArray(KeyType *array,int arrayLength){
 	int i=0;
 	for(i;i<arrayLength;i++){
@@ -294,14 +331,30 @@ BOOL isNodeFull(BTreeNode *node){
 }
 int main(void){
 	BTreeCreate();
+//	printf("%p\n",globalRootNode);
 	BTreeInsert(globalRootNode,5);
 	BTreeInsert(globalRootNode,3);
 	BTreeInsert(globalRootNode,4);
 	BTreeInsert(globalRootNode,6);
 	BTreeInsert(globalRootNode,1);
+	BTreeInsert(globalRootNode,1);
+	BTreeInsert(globalRootNode,1);
+	BTreeInsert(globalRootNode,1);
+	BTreeInsert(globalRootNode,1);
+	BTreeInsert(globalRootNode,1);
+	BTreeInsert(globalRootNode,1);
+	BTreeInsert(globalRootNode,1);
+	BTreeInsert(globalRootNode,1);
+	showTheTreeByLevel(globalRootNode);
+	showThePointerArray(globalRootNode);
+	showThePointerArray(globalRootNode->childNodePointerArray[0]);
+	showThePointerArray(globalRootNode->childNodePointerArray[1]);
+	/*
+	printf("%p\n",globalRootNode);
 	showThePointerArray(globalRootNode);
 	showTheKeyValueArray(globalRootNode);
 	showTheKeyValueArray(globalRootNode->childNodePointerArray[0]);
 	showTheKeyValueArray(globalRootNode->childNodePointerArray[1]);
+	*/
 	return 1;
 }
