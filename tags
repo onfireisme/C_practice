@@ -114,8 +114,9 @@ initialHeap	dataStructure/binary_heap.c	/^void initialHeap(Heap *localHeap){$/;"
 initialNode	dataStructure/B+Tree.c	/^void initialNode(BTreeNode **newNode,BTreeNode *fatherNode,NodeType nodeType$/;"	f
 initialQueue	dataStructure/two_stack_form_one_queue/two_stack_form_one_queue.c	/^void initialQueue(StackFormedQueue *localQueue){$/;"	f
 initialStack	dataStructure/two_stack_form_one_queue/stack.c	/^void initialStack(MyStack *temp_stack){$/;"	f
-insertIntoKeyValueArray	dataStructure/B+Tree.c	/^void insertIntoKeyValueArray(KeyType *keyValueArray,int insertPostion,$/;"	f
-insertIntoPointerArray	dataStructure/B+Tree.c	/^void insertIntoPointerArray(BTreeNode **pointerArray,int insertPostion,int endFlag,$/;"	f
+insertIntoPointerArray	dataStructure/B+Tree.c	/^void insertIntoPointerArray(BTreeNode *fatherNode,int insertPostion,$/;"	f
+insertNewKeyValue	dataStructure/B+Tree.c	/^void insertNewKeyValue(BTreeNode *node,KeyType keyValue){$/;"	f
+insertSpecifiedKeyValue	dataStructure/B+Tree.c	/^void insertSpecifiedKeyValue(KeyType *keyValueArray,int insertPostion,$/;"	f
 insert_node	dataStructure/linked_list.c	/^void insert_node(list_node *local_guard_node,int new_node_value){$/;"	f
 isNodeFull	dataStructure/B+Tree.c	/^BOOL isNodeFull(BTreeNode *node){$/;"	f
 is_include_rotate_string	algorithms/string_rotate_check.c	/^int is_include_rotate_string(char *compared_string,$/;"	f
