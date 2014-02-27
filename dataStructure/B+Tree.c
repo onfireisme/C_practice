@@ -49,21 +49,21 @@ BTreeNode *splitNode(BTreeNode *node){
 	int positionAtFatherNode=node->positionAtFatherNode;
 	//firstly,when the node is root node ,something will be different
 	if(fatherNode==NULL){
-		//itmeans that it is the root node,and we need to split it
+		//initial the new root node
 		BTreeNode *newRootNode;
 		initialNode(&newRootNode,NULL,UNLEAF,NEGATIVE);
 		globalRootNode=newRootNode;
+		//set the node
 		node->fatherNode=newRootNode;
 		node->positionAtFatherNode=0;
+		//set the new node
 		fatherNode=newRootNode;
 		fatherNode->childNodePointerArray[++(fatherNode->pointerCurrentIndex)]
 			=node;
+		fatherNode->rightBrotherNode=NULL;
 		positionAtFatherNode=node->positionAtFatherNode;
-		//set the rightBrotherNode
-		newRootNode->rightBrotherNode=NULL;
-		node->rightBrotherNode=newRootNode;
 	}
-	//then when the node is not root node
+	//when the node is not root node
 	if(node->nodeType==LEAF){
 		initialNode(&newNode,node->fatherNode,LEAF,positionAtFatherNode+1);
 	}
