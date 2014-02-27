@@ -330,15 +330,8 @@ int main(void){
 		printf("error,the arraylength should larger than 1");
 	}
 	generateRandomArray(globalSortArray);
-	/*
-	globalSortArray[0]=5;
-	globalSortArray[1]=3;
-	globalSortArray[2]=4;
-	globalSortArray[3]=3;
-	*/
 	showTheArray(globalSortArray,ARRAYLENGTH);
 	printf("\n");
-//	printf("%d\n",pivotPartition(globalSortArray,86,0,ARRAYLENGTH-1));
 	printf("%d\n",medianOfMediansQuickSelectRecursion(globalSortArray,0,ARRAYLENGTH-1,K));
 	showTheArray(globalSortArray,ARRAYLENGTH);
 	printf("sortedArray\n");
