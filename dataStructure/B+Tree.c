@@ -1,14 +1,12 @@
 #include</home/wangyan/C_practice/dataStructure/B+Tree.h>
-//let us assume the value is always positive
 //how to release the alocated node?I can write a recursion to do it.
 /*
  * build tree
  */
 void BTreeCreate(){
-	initialNode(&globalRootNode,NULL,UNLEAF,NEGATIVE);
+	initialNode(&globalRootNode,NULL,UNLEAF);
 }
-void initialNode(BTreeNode **newNode,BTreeNode *fatherNode,NodeType nodeType
-		,int positionAtFatherNode){
+void initialNode(BTreeNode **newNode,BTreeNode *fatherNode,NodeType nodeType){
 	*newNode=(BTreeNode *)malloc(sizeof(BTreeNode));
 	(*newNode)->keyValueCurrentIndex=-1;
 	if(nodeType==UNLEAF){
@@ -20,26 +18,18 @@ void initialNode(BTreeNode **newNode,BTreeNode *fatherNode,NodeType nodeType
 		(*newNode)->childNodePointerArray=NULL;
 	}
 	if(fatherNode!=NULL){
-		/*
-		 * I should insert the pointer to the pointer array after it was initialed
-		 * why?becuase it makes procedure simpler
-		 */
 		(*newNode)->fatherNode=fatherNode;
-		(*newNode)->positionAtFatherNode=positionAtFatherNode;
-		pointerInsert(fatherNode,
-				positionAtFatherNode,*newNode);
 	}
 	else{
 		(*newNode)->fatherNode=NULL;
-		(*newNode)->positionAtFatherNode=NEGATIVE;
 	}
-	(*newNode)->pointerCurrentIndex=NEGATIVE;
+	(*newNode)->childNodePointerCurrentIndex=NEGATIVE;
 	(*newNode)->keyValueCurrentIndex=NEGATIVE;
+	(*newNode)->rightBrotherNode=NULL;
 }
 void generateRandomTree(BTreeNode **rootNode,int treeKeyValueCount){
 	int i=0;
 	for(i;i<treeKeyValueCount;i++){
-		printf("%p ",*rootNode);
 		globalKeyValueArray[i]=random(100);
 		BTreeInsert(*rootNode,globalKeyValueArray[i]);
 	}
@@ -49,10 +39,11 @@ void generateRandomTree(BTreeNode **rootNode,int treeKeyValueCount){
  * insert
  */
 void BTreeInsert(BTreeNode *rootNode,KeyType keyValue){
-	if(rootNode->pointerCurrentIndex==NEGATIVE){
-		//the special case,that we don't have the fisrt 
+	if(rootNode->childNodePointerCurrentIndex==NEGATIVE){
+		//the special case,that we don't have the fisrt leaf node
 		BTreeNode *newNode;
-		initialNode(&newNode,rootNode,LEAF,0);
+		initialNode(&newNode,rootNode,LEAF);
+		rootNode->childNodePointerArray[++(rootNode->childNodePointerCurrentIndex)]=newNode;
 		newNode->rightBrotherNode=NULL;
 		keyValueInsert(newNode,keyValue);
 		return;
@@ -97,7 +88,7 @@ void BTreeInsert(BTreeNode *rootNode,KeyType keyValue){
 BTreeNode *splitNode(BTreeNode *node){
 	//check again ,if the node is full ,if not show the error
 	if(!isNodeFull(node)){
-		printf("error! the node is not full!\n");
+		printf("error at splitNode fucntion!\n the node is not full!\n");
 		return;
 	}
 	/*
@@ -107,34 +98,33 @@ BTreeNode *splitNode(BTreeNode *node){
 	 */
 	BTreeNode *newNode;
 	BTreeNode *fatherNode=node->fatherNode;;
-	int positionAtFatherNode=node->positionAtFatherNode;
 	//firstly,when the node is root node ,something will be different
 	if(fatherNode==NULL){
 		//initial the new root node
 		BTreeNode *newRootNode;
-		initialNode(&newRootNode,NULL,UNLEAF,NEGATIVE);
+		initialNode(&newRootNode,NULL,UNLEAF);
 		globalRootNode=newRootNode;
 		//set the node
 		node->fatherNode=newRootNode;
-		node->positionAtFatherNode=0;
-		//set the new node
+		//set the new root node
 		fatherNode=newRootNode;
-		fatherNode->childNodePointerArray[++(fatherNode->pointerCurrentIndex)]
+		fatherNode->childNodePointerArray[++(fatherNode->childNodePointerCurrentIndex)]
 			=node;
 		fatherNode->rightBrotherNode=NULL;
-		positionAtFatherNode=node->positionAtFatherNode;
 	}
 	//when the node is not root node
 	if(node->nodeType==LEAF){
-		initialNode(&newNode,node->fatherNode,LEAF,positionAtFatherNode+1);
+		initialNode(&newNode,node->fatherNode,LEAF);
 	}
 	else{
-		initialNode(&newNode,node->fatherNode,UNLEAF,positionAtFatherNode+1);
+		initialNode(&newNode,node->fatherNode,UNLEAF);
 		//split the array of pointer to the new node
-		pointerArraySplit(node->childNodePointerArray,newNode->childNodePointerArray);
-		node->pointerCurrentIndex=DEGREE-1;
-		newNode->pointerCurrentIndex=DEGREE-1;
+		pointerArraySplit(node,newNode);
+		node->childNodePointerCurrentIndex=DEGREE-1;
+		newNode->childNodePointerCurrentIndex=DEGREE-1;
 	}
+	//insert the address of the new node to the father node,after the old node
+	pointerInsert(fatherNode,node,newNode);
 	//set the rightBrotherNode
 	if(node->rightBrotherNode==NULL){
 		newNode->rightBrotherNode=NULL;
@@ -146,8 +136,7 @@ BTreeNode *splitNode(BTreeNode *node){
 	}
 	//insert the key value to the father node
 	KeyType insertedKeyValue=node->keyValueArray[DEGREE-1];
-	specifiedKeyValueInsert(fatherNode,positionAtFatherNode,
-			insertedKeyValue);
+	keyValueInsert(fatherNode,insertedKeyValue);
 	//split the array of key value to the new node
 	keyValueArraySplit(node->keyValueArray,newNode->keyValueArray);
 	node->keyValueCurrentIndex=DEGREE-2;
@@ -160,16 +149,21 @@ void keyValueArraySplit(KeyType *keyValueArrayOne,KeyType *keyValueArrayTwo){
 		keyValueArrayTwo[i]=keyValueArrayOne[i+DEGREE];
 	}
 }
-void pointerArraySplit(BTreeNode **pointerArrayOne,BTreeNode **pointerArrayTwo){
+void pointerArraySplit(BTreeNode *oldNode,BTreeNode *newNode){
+	/*
+	 * I make a huge mistake,you split the pointer to a new node
+	 * but the child node still regard the old node as its father node
+	 */
 	int i=0;
 	for(i;i<DEGREE;i++){
-		pointerArrayTwo[i]=pointerArrayOne[i+DEGREE];
+		newNode->childNodePointerArray[i]=oldNode->childNodePointerArray[i+DEGREE];
+		newNode->childNodePointerArray[i]->fatherNode=newNode;
 	}
 }
 BTreeNode *findPointer(BTreeNode *node,KeyType keyValue){
 	//the special case ,when it has no keyValue
 	if(node->keyValueCurrentIndex==NEGATIVE){
-		if(node->pointerCurrentIndex==0){
+		if(node->childNodePointerCurrentIndex==0){
 			return node->childNodePointerArray[0];
 		}
 		else{
@@ -185,39 +179,35 @@ BTreeNode *findPointer(BTreeNode *node,KeyType keyValue){
 	}
 	return node->childNodePointerArray[flag];
 }
-void pointerInsert(BTreeNode *fatherNode,int insertPostion,
-		BTreeNode *pointer){
-	int endFlag=fatherNode->pointerCurrentIndex;
-	//remembet the insertPostion is count from 0,not from 1
-	if(insertPostion>endFlag+1){
-		printf("error\n the insertPostion is larger than the endFlag+1\n");
-		return;
+void pointerInsert(BTreeNode *fatherNode,BTreeNode *oldNode,
+		BTreeNode *newNode){
+	if(oldNode==NULL){
+		fatherNode->childNodePointerArray[0]=newNode;
 	}
-	if(insertPostion<0){
-		insertPostion=0;
-	}
-	endFlag++;
-	(fatherNode->pointerCurrentIndex)++;
-	BTreeNode **pointerArray=fatherNode->childNodePointerArray;
-	pointerArray[endFlag]=pointer;
-	if(insertPostion>=endFlag){
-		return;
-	}
-	while(endFlag!=insertPostion){
-		pointerXorSwap(&pointerArray[endFlag],&pointerArray[endFlag-1]);
-		endFlag--;
+	int countFlag=fatherNode->childNodePointerCurrentIndex;
+	fatherNode->childNodePointerArray[++(fatherNode->childNodePointerCurrentIndex)]
+		=newNode;
+	while(fatherNode->childNodePointerArray[countFlag]!=oldNode){
+		pointerXorSwap(&fatherNode->childNodePointerArray[countFlag],
+				&fatherNode->childNodePointerArray[countFlag+1]);
+		countFlag--;
+		if(countFlag==-1){
+			printf("error at pointerInsert function!!\n"
+					"could not find the pointer at father node\n");
+		}
 	}
 }
 void specifiedKeyValueInsert(BTreeNode *fatherNode,int insertPostion,
 		KeyType keyValue){
 	if(fatherNode->keyValueCurrentIndex==2*DEGREE-2){
-		printf("error!!!\nthe node is full we can not insert more!\n");
+		printf("error !!!\nthe node is full we can not insert more!\n");
 		return;
 	}
 	//remembet the insertPostion is count from 0,not from 1
 	int endFlag=fatherNode->keyValueCurrentIndex;
 	if(insertPostion>endFlag+1){
-		printf("error\n the insertPostion is larger than the endFlag\n");
+		printf("error at specified key value function\n"
+				"the insertPostion is larger than the endFlag+1\n");
 		return;
 	}
 	if(insertPostion<0){
@@ -283,8 +273,8 @@ void showTheKeyValueArray(BTreeNode *node){
 }
 void showThePointerArray(BTreeNode *node){
 	int i=0;
-	for(i;i<=node->pointerCurrentIndex;i++){
-		printf("%p ",node->childNodePointerArray);
+	for(i;i<=node->childNodePointerCurrentIndex;i++){
+		printf("%p ",node->childNodePointerArray[i]);
 	}
 	printf("\n");
 }
@@ -294,38 +284,37 @@ void showTheTreeByLevel(BTreeNode *rootNode){
 	int keyValueCount=0;
 	BTreeNode *node=rootNode;
 	BTreeNode *tempNode;
-	printf("the unleaf key value\n");
-	int loopCount=0;
-	while(node->nodeType==UNLEAF&&loopCount<LOOPLIMIT){
-		loopCount++;
+	printf("the unleaf key value\n\n");
+	while(node->nodeType==UNLEAF){
 		tempNode=node->childNodePointerArray[0];
 		nodeCount=1;
+		printf("the level %d\n",levelCount);
 		while(node!=NULL){
-			printf("the %d unleaf node of level %d,the address of the node is %p the postion"
-					"at father node is %d the father node is %p\n ",
-					nodeCount,levelCount,node,node->positionAtFatherNode,node->fatherNode);
+			printf("the %d unleaf node,the address of the node is %p,"
+					"the father node is %p\n",
+					nodeCount,node,node->fatherNode);
 			showTheKeyValueArray(node);
 			keyValueCount=keyValueCount+node->keyValueCurrentIndex+1;
 			node=node->rightBrotherNode;
 			nodeCount++;
 		}
+		printf("\n");
 		node=tempNode;
 		levelCount++;
 	}
-	printf("the leaf key value\n");
+	printf("\n");
+	printf("the leaf key value\n\n");
 	nodeCount=1;
-	loopCount=0;
-	while(node!=NULL&&loopCount<LOOPLIMIT){
-		loopCount++;
-		printf("the %d leaf node,the node address is%p,the position at father node is %d"
+	while(node!=NULL){
+		printf("the %d leaf node,the node address is%p,"
 				"the father node is %p\n",
-				nodeCount,node,node->positionAtFatherNode,node->fatherNode);
+				nodeCount,node,node->fatherNode);
 		showTheKeyValueArray(node);
 		keyValueCount=keyValueCount+node->keyValueCurrentIndex+1;
 		node=node->rightBrotherNode;
 		nodeCount++;
 	}
-	printf("the total key value number is %d \n",keyValueCount);
+//	printf("the total key value number is %d \n",keyValueCount);
 }
 void showTheArray(KeyType *array,int arrayLength){
 	int i=0;
@@ -351,7 +340,7 @@ BOOL isNodeFull(BTreeNode *node){
 	}
 	else{
 		if(node->keyValueCurrentIndex==(2*DEGREE-2)){
-			if(node->pointerCurrentIndex==(2*DEGREE-1)){
+			if(node->childNodePointerCurrentIndex==(2*DEGREE-1)){
 				return TRUE;
 			}
 			else{
@@ -388,6 +377,7 @@ SearchResult BTreeSearch(BTreeNode *rootNode,KeyType keyValue){
 	BTreeNode *node=rootNode;
 	SearchResult result;
 	int countFlag;
+	int levelCount=1;
 	// find the leaf node
 	while(node->nodeType==UNLEAF){
 		countFlag=0;
@@ -395,10 +385,14 @@ SearchResult BTreeSearch(BTreeNode *rootNode,KeyType keyValue){
 			if(keyValue==node->keyValueArray[countFlag]){
 				result.leafNode=node;
 				result.resultPosition=countFlag;
+				printf("the result is from unleaf node,at level %d\n",levelCount);
+				printf("the value is %d the address of result node %p,the position of result at node %d\n",
+						keyValue,result.leafNode,result.resultPosition);
 				return result;
 			}
 			countFlag++;
 		}
+		levelCount++;
 		node=node->childNodePointerArray[countFlag];
 	}
 	//search at the leaf node
@@ -407,6 +401,9 @@ SearchResult BTreeSearch(BTreeNode *rootNode,KeyType keyValue){
 		if(keyValue==node->keyValueArray[countFlag]){
 			result.leafNode=node;
 			result.resultPosition=countFlag;
+			printf("the result is from leaf node\n");
+			printf("the value is %d the address of result node %p,the position of result at node %d\n",
+					keyValue,result.leafNode,result.resultPosition);
 			return result;
 		}
 		countFlag++;
@@ -416,18 +413,32 @@ SearchResult BTreeSearch(BTreeNode *rootNode,KeyType keyValue){
 }
 int main(void){
 	BTreeCreate();
-//	specifiedKeyValueInsert(globa
-//	printf("%p\n",globalRootNode);	
 	generateRandomTree(&globalRootNode,KEYVALUENUMBER);
-	printf("%p\n",globalRootNode);	
-//	specifiedKeyValueInsert(globalRootNode,1,92);
-//	BTreeInsert(globalRootNode,92);
 	showTheArray(globalKeyValueArray,KEYVALUENUMBER);
 	showTheTreeByLevel(globalRootNode);
-	printf("test\n");
-//	showTheKeyValueArray(globalKeyValueArray,KEYVALUENUMBER);
+//	showTheTreeByLevel(globalRootNode);
+//	showThePointerArray(globalRootNode);
 	SearchResult result=BTreeSearch(globalRootNode,globalKeyValueArray[0]);
-	printf("result position is%d the address of the leaf is %p the keyvalue is %d ",
-			result.resultPosition,result.leafNode,globalKeyValueArray[0]);
 	return 1;
+	/*
+	BTreeNode node1;
+	BTreeNode node2;
+	BTreeNode node3;
+	BTreeNode node4;
+	globalRootNode->childNodePointerArray[++(globalRootNode->childNodePointerCurrentIndex)]
+		=&node1;
+	globalRootNode->childNodePointerArray[++(globalRootNode->childNodePointerCurrentIndex)]
+		=&node2;
+	globalRootNode->childNodePointerArray[++(globalRootNode->childNodePointerCurrentIndex)]
+		=&node3;
+	globalRootNode->childNodePointerArray[++(globalRootNode->childNodePointerCurrentIndex)]
+		=&node4;
+	globalRootNode->keyValueArray[++(globalRootNode->keyValueCurrentIndex)]
+		=4;
+	globalRootNode->keyValueArray[++(globalRootNode->keyValueCurrentIndex)]
+		=4;
+	globalRootNode->keyValueArray[++(globalRootNode->keyValueCurrentIndex)]
+		=4;
+	splitNode(globalRootNode);
+	*/
 }

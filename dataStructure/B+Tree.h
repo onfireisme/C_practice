@@ -6,14 +6,14 @@
 #define RANDOMMAX 100
 #define random(x)(rand()%x)
 #define MIDDLE 2
-#define DEGREE 2
+#define DEGREE 50
 #define LEAFNODEPOINTERARRAYLENGTH 100
 #define UNLEAFNODEPOINTERARRAYLENGTH 100
 #define LEAF 1
 #define UNLEAF 0
 #define POINTERSIZE (sizeof(void *))
 #define NEGATIVE -1
-#define KEYVALUENUMBER 20
+#define KEYVALUENUMBER 300
 #define LOOPLIMIT 10
 typedef int BOOL;
 typedef int KeyType;
@@ -28,16 +28,17 @@ typedef const int * constPointerInt;
  */
 //the choice to use two kinds of node is really a bad idea
 typedef struct MyNode{
-	/*
-	 * the question is ,the more attribute you set,the more you need to set
-	 * once you forget to set it ,then something will wrong
-	 */
 	struct MyNode *fatherNode;
 	struct MyNode *rightBrotherNode;
 	struct MyNode **childNodePointerArray;
-	int positionAtFatherNode;
+	/*
+	 * why I don't use the positionAtFatherNode attribute
+	 * very simple ,the more attribute you create,the more you need to set
+	 * once you forget to set it,then something will go wrong
+	 */
+	//int positionAtFatherNode;
 	KeyType keyValueArray[2*DEGREE-1];
-	int pointerCurrentIndex;
+	int childNodePointerCurrentIndex;
 	int keyValueCurrentIndex;
 	NodeType nodeType;
 }BTreeNode;
@@ -47,23 +48,22 @@ typedef struct {
 }SearchResult;
 //initial part
 void BTreeCreate();
-void initialNode(BTreeNode **newNode,BTreeNode *fatherNode,NodeType nodeType
-		,int positionAtFatherNode);
+void initialNode(BTreeNode **newNode,BTreeNode *fatherNode,NodeType nodeType);
 void generateRandomTree(BTreeNode **rootNode,int treeKeyValueCount);
 /*
  *split the node
  */
 BTreeNode *splitNode(BTreeNode *node);
 void keyValueArraySplit(KeyType *keyValueArrayOne,KeyType *keyValueArrayTwo);
-void pointerArraySplit(BTreeNode **pointerArrayOne,BTreeNode **pointerArrayTwo);
+void pointerArraySplit(BTreeNode *oldNode,BTreeNode *newNode);
 BOOL isNodeFull(BTreeNode *node);
 /*
  * insert the keyvalue and child pointer
  */
 void BTreeInsert(BTreeNode *rootNode,KeyType keyValue);
 void keyValueInsert(BTreeNode *node,KeyType keyValue);
-void pointerInsert(BTreeNode *fatherNode,int insertPostion,
-		BTreeNode *pointer);
+void pointerInsert(BTreeNode *fatherNode,BTreeNode *oldNode,
+		BTreeNode *newNode);
 void specifiedKeyValueInsert(BTreeNode *fatherNode,int insertPostion,KeyType keyValue);
 BTreeNode *findPointer(BTreeNode *node,KeyType keyValue);
 //search 
@@ -88,4 +88,4 @@ void pointerXorSwap(BTreeNode **pointerOne,BTreeNode **pointerTwo);
 
 //global variables
 BTreeNode *globalRootNode;
-KeyType globalKeyValueArray[20];
+KeyType globalKeyValueArray[KEYVALUENUMBER];
