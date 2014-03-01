@@ -11,9 +11,11 @@ ARRAY_LENGTH	dataStructure/binary_sort_tree.h	9;"	d
 BIG	algorithms/quickSort.h	11;"	d
 BOOL	algorithms/quickSort.h	/^typedef int BOOL;$/;"	t
 BOOL	dataStructure/B+Tree.h	/^typedef int BOOL;$/;"	t
-BTreeCreate	dataStructure/B+Tree.c	/^void BTreeCreate(BTreeNode *rootNode){$/;"	f
+BTreeCreate	dataStructure/B+Tree.c	/^void BTreeCreate(){$/;"	f
+BTreeDelete	dataStructure/B+Tree.c	/^void BTreeDelete(BTreeNode *rootNode,KeyType keyValue){$/;"	f
 BTreeInsert	dataStructure/B+Tree.c	/^void BTreeInsert(BTreeNode *rootNode,KeyType keyValue){$/;"	f
 BTreeNode	dataStructure/B+Tree.h	/^}BTreeNode;$/;"	t	typeref:struct:MyNode
+BTreeSearch	dataStructure/B+Tree.c	/^SearchResult BTreeSearch(BTreeNode *rootNode,KeyType keyValue){$/;"	f
 DEGREE	dataStructure/B+Tree.h	10;"	d
 DIVIDEDNUMBER	algorithms/quickSort.h	8;"	d
 DIVIDEDNUMBER	dataStructure/B+Tree.h	8;"	d
@@ -31,6 +33,7 @@ Heap	dataStructure/binary_heap.h	/^}Heap;$/;"	t	typeref:struct:myHeap
 InitBinaryTree	dataStructure/binary_sort_tree.c	/^TreeNode *InitBinaryTree(int node_value){$/;"	f
 InsertTreeNode	dataStructure/binary_sort_tree.c	/^void InsertTreeNode(TreeNode *root_node,int node_value){$/;"	f
 K	algorithms/quickSort.h	13;"	d
+KEYVALUENUMBER	dataStructure/B+Tree.h	17;"	d
 KeyType	dataStructure/B+Tree.h	/^typedef int KeyType;$/;"	t
 LANDMAKR_PATH	others/fopen.c	4;"	d	file:
 LANDMARK_NUMBER	others/fopen.c	3;"	d	file:
@@ -52,7 +55,7 @@ NodeType	dataStructure/binary_heap.h	/^typedef int NodeType;$/;"	t
 POINTERSIZE	dataStructure/B+Tree.h	15;"	d
 PrintNodeValue	dataStructure/binary_sort_tree.c	/^void PrintNodeValue(TreeNode *arbitrary_tree_node){$/;"	f
 QUEUE_LENGTH	dataStructure/queue.h	6;"	d
-Queue	dataStructure/queue.h	/^}Queue;$/;"	t	typeref:struct:__anon3
+Queue	dataStructure/queue.h	/^}Queue;$/;"	t	typeref:struct:__anon4
 RANDOMMAX	algorithms/quickSort.h	6;"	d
 RANDOMMAX	dataStructure/B+Tree.h	6;"	d
 RIGHT_NODE	dataStructure/binary_sort_tree.h	6;"	d
@@ -62,6 +65,7 @@ SMALL	algorithms/quickSort.h	10;"	d
 STACK_LENGTH	dataStructure/two_stack_form_one_queue/stack.h	3;"	d
 STRING_ONE_BEGIN	algorithms/calculate_string_distance.h	5;"	d
 STRING_TWO_BEGIN	algorithms/calculate_string_distance.h	6;"	d
+SearchResult	dataStructure/B+Tree.h	/^}SearchResult;$/;"	t	typeref:struct:__anon3
 StackFormedQueue	dataStructure/two_stack_form_one_queue/two_stack_form_one_queue.h	/^}StackFormedQueue;$/;"	t	typeref:struct:__anon1
 TRUE	algorithms/quickSort.h	3;"	d
 TRUE	dataStructure/B+Tree.h	3;"	d
@@ -79,11 +83,12 @@ TreeSuccessor	dataStructure/binary_sort_tree.c	/^TreeNode *TreeSuccessor(TreeNod
 ULONGLONG	algorithms/find_number_one.c	/^typedef int ULONGLONG;$/;"	t	file:
 UNLEAF	dataStructure/B+Tree.h	14;"	d
 UNLEAFNODEPOINTERARRAYLENGTH	dataStructure/B+Tree.h	12;"	d
-begin	dataStructure/queue.h	/^	int begin;$/;"	m	struct:__anon3
+begin	dataStructure/queue.h	/^	int begin;$/;"	m	struct:__anon4
 buildMaxHeap	dataStructure/binary_heap.c	/^void buildMaxHeap(Heap *localHeap,int nodePosition){$/;"	f
 calculate_string_distance	algorithms/calculate_string_distance.c	/^int calculate_string_distance(char *string_one,char *string_two,$/;"	f
 calculate_string_distance_recursion	algorithms/calculate_string_distance.c	/^int calculate_string_distance_recursion(char *string_one,char *string_two,$/;"	f
 childNodePointerArray	dataStructure/B+Tree.h	/^	struct MyNode **childNodePointerArray;$/;"	m	struct:MyNode	typeref:struct:MyNode::MyNode
+constPointerInt	dataStructure/B+Tree.h	/^typedef const int * constPointerInt;$/;"	t
 copy_stack	dataStructure/two_stack_form_one_queue/two_stack_form_one_queue.c	/^void copy_stack(StackFormedQueue *localQueue){$/;"	f
 countOneNumber	algorithms/find_number_one.c	/^int countOneNumber(ULONGLONG number){$/;"	f
 create_list	dataStructure/linked_list.c	/^void create_list(list_node *local_guard_node){$/;"	f
@@ -91,21 +96,24 @@ current_position	dataStructure/two_stack_form_one_queue/stack.h	/^	int current_p
 deQueue	dataStructure/two_stack_form_one_queue/two_stack_form_one_queue.c	/^void deQueue(StackFormedQueue *localQueue){$/;"	f
 delete_node	dataStructure/linked_list.c	/^void delete_node(list_node *local_guard_node, int local_value){$/;"	f
 double_copy_string	algorithms/string_rotate_check.c	/^char * double_copy_string(char *source_string,int string_length){$/;"	f
-elementCount	dataStructure/queue.h	/^	int elementCount;$/;"	m	struct:__anon3
+elementCount	dataStructure/queue.h	/^	int elementCount;$/;"	m	struct:__anon4
 enQueue	dataStructure/two_stack_form_one_queue/two_stack_form_one_queue.c	/^void enQueue(StackFormedQueue *localQueue,stackNodeType local_node){$/;"	f
-end	dataStructure/queue.h	/^	int end;$/;"	m	struct:__anon3
+end	dataStructure/queue.h	/^	int end;$/;"	m	struct:__anon4
 false	algorithms/calculate_string_distance.h	3;"	d
 false	algorithms/string_rotate_check.h	3;"	d
 fatherNode	dataStructure/B+Tree.h	/^	struct MyNode *fatherNode;$/;"	m	struct:MyNode	typeref:struct:MyNode::MyNode
 father_node	dataStructure/binary_sort_tree.h	/^	struct tree_node_tag *father_node;$/;"	m	struct:tree_node_tag	typeref:struct:tree_node_tag::tree_node_tag
+findPointer	dataStructure/B+Tree.c	/^BTreeNode *findPointer(BTreeNode *node,KeyType keyValue){$/;"	f
 freeHeap	dataStructure/binary_heap.c	/^void freeHeap(Heap *localHeap){$/;"	f
 freeQueue	dataStructure/two_stack_form_one_queue/two_stack_form_one_queue.c	/^void freeQueue(StackFormedQueue *localQueue){$/;"	f
 freeStack	dataStructure/two_stack_form_one_queue/stack.c	/^void freeStack(MyStack *local_stack){$/;"	f
 free_node	dataStructure/linked_list.c	/^void free_node(list_node *guard_node){$/;"	f
 generateRandomArray	algorithms/quickSort.c	/^void generateRandomArray(NodeType *sortArray){$/;"	f
 generateRandomIntArray	dataStructure/B+Tree.c	/^void generateRandomIntArray(KeyType *array,int arrayLength){$/;"	f
+generateRandomTree	dataStructure/B+Tree.c	/^void generateRandomTree(BTreeNode *rootNode,int treeKeyValueCount){$/;"	f
 getDivideUpperBound	algorithms/quickSort.c	/^int getDivideUpperBound(int divideNumber,int dividedNumber){$/;"	f
 getSortedHeap	dataStructure/binary_heap.c	/^void getSortedHeap(Heap *localHeap){$/;"	f
+globalKeyValueArray	dataStructure/B+Tree.h	/^KeyType globalKeyValueArray[20];$/;"	v
 globalRootNode	dataStructure/B+Tree.h	/^BTreeNode *globalRootNode;$/;"	v
 globalSortArray	algorithms/quickSort.h	/^NodeType *globalSortArray;$/;"	v
 head	dataStructure/linked_list.h	/^	list_node head;$/;"	m	struct:list_tag
@@ -114,16 +122,15 @@ initialHeap	dataStructure/binary_heap.c	/^void initialHeap(Heap *localHeap){$/;"
 initialNode	dataStructure/B+Tree.c	/^void initialNode(BTreeNode **newNode,BTreeNode *fatherNode,NodeType nodeType$/;"	f
 initialQueue	dataStructure/two_stack_form_one_queue/two_stack_form_one_queue.c	/^void initialQueue(StackFormedQueue *localQueue){$/;"	f
 initialStack	dataStructure/two_stack_form_one_queue/stack.c	/^void initialStack(MyStack *temp_stack){$/;"	f
-insertIntoPointerArray	dataStructure/B+Tree.c	/^void insertIntoPointerArray(BTreeNode *fatherNode,int insertPostion,$/;"	f
-insertNewKeyValue	dataStructure/B+Tree.c	/^void insertNewKeyValue(BTreeNode *node,KeyType keyValue){$/;"	f
-insertSpecifiedKeyValue	dataStructure/B+Tree.c	/^void insertSpecifiedKeyValue(KeyType *keyValueArray,int insertPostion,$/;"	f
 insert_node	dataStructure/linked_list.c	/^void insert_node(list_node *local_guard_node,int new_node_value){$/;"	f
 isNodeFull	dataStructure/B+Tree.c	/^BOOL isNodeFull(BTreeNode *node){$/;"	f
 is_include_rotate_string	algorithms/string_rotate_check.c	/^int is_include_rotate_string(char *compared_string,$/;"	f
 keyValueArray	dataStructure/B+Tree.h	/^	KeyType keyValueArray[2*DEGREE-1];$/;"	m	struct:MyNode
 keyValueArraySplit	dataStructure/B+Tree.c	/^void keyValueArraySplit(KeyType *keyValueArrayOne,KeyType *keyValueArrayTwo){$/;"	f
 keyValueCurrentIndex	dataStructure/B+Tree.h	/^	int keyValueCurrentIndex;$/;"	m	struct:MyNode
+keyValueInsert	dataStructure/B+Tree.c	/^void keyValueInsert(BTreeNode *node,KeyType keyValue){$/;"	f
 lastNodePosition	dataStructure/binary_heap.h	/^	int lastNodePosition;$/;"	m	struct:myHeap
+leafNode	dataStructure/B+Tree.h	/^	BTreeNode *leafNode;$/;"	m	struct:__anon3
 left_child_node	dataStructure/binary_sort_tree.h	/^	struct tree_node_tag *left_child_node;$/;"	m	struct:tree_node_tag	typeref:struct:tree_node_tag::tree_node_tag
 length	dataStructure/linked_list.h	/^	int length;$/;"	m	struct:list_tag
 linked_list	dataStructure/linked_list.h	/^}linked_list;$/;"	t	typeref:struct:list_tag
@@ -156,6 +163,7 @@ myHeap	dataStructure/binary_heap.h	/^typedef struct myHeap{$/;"	s
 next_node	dataStructure/linked_list.h	/^	struct	node_tag *next_node;$/;"	m	struct:node_tag	typeref:struct:node_tag::node_tag
 nodeArray	dataStructure/binary_heap.h	/^	NodeType *nodeArray;$/;"	m	struct:myHeap
 nodeArray	dataStructure/two_stack_form_one_queue/stack.h	/^	node_type *nodeArray;$/;"	m	struct:__anon2
+nodeCombine	dataStructure/B+Tree.c	/^void nodeCombine(){$/;"	f
 nodeType	dataStructure/B+Tree.h	/^	NodeType nodeType;$/;"	m	struct:MyNode
 node_malloc	dataStructure/linked_list.c	/^list_node *node_malloc(){$/;"	f
 node_tag	dataStructure/linked_list.h	/^typedef struct node_tag{$/;"	s
@@ -165,12 +173,14 @@ node_value	dataStructure/linked_list.h	/^	int node_value;$/;"	m	struct:node_tag
 pivotPartition	algorithms/quickSort.c	/^int pivotPartition(NodeType *sortArray,NodeType pivot,int beginFlag,int endFlag){$/;"	f
 pointerArraySplit	dataStructure/B+Tree.c	/^void pointerArraySplit(BTreeNode **pointerArrayOne,BTreeNode **pointerArrayTwo){$/;"	f
 pointerCurrentIndex	dataStructure/B+Tree.h	/^	int pointerCurrentIndex;$/;"	m	struct:MyNode
+pointerInsert	dataStructure/B+Tree.c	/^void pointerInsert(BTreeNode *fatherNode,int insertPostion,$/;"	f
+pointerXorSwap	dataStructure/B+Tree.c	/^void pointerXorSwap(BTreeNode **pointerOne,BTreeNode **pointerTwo){$/;"	f
 pop	dataStructure/two_stack_form_one_queue/stack.c	/^void pop(MyStack *temp_stack){$/;"	f
 positionAtFatherNode	dataStructure/B+Tree.h	/^	int positionAtFatherNode;$/;"	m	struct:MyNode
 previous_node	dataStructure/linked_list.h	/^	struct  node_tag *previous_node;$/;"	m	struct:node_tag	typeref:struct:node_tag::node_tag
 push	dataStructure/two_stack_form_one_queue/stack.c	/^void push(MyStack *temp_stack,node_type node_value){$/;"	f
 pushNode	dataStructure/binary_heap.c	/^void pushNode(Heap *localHeap,NodeType nodeValue){$/;"	f
-queueArray	dataStructure/queue.h	/^	queueElementType *queueArray;$/;"	m	struct:__anon3
+queueArray	dataStructure/queue.h	/^	queueElementType *queueArray;$/;"	m	struct:__anon4
 queueElementType	dataStructure/queue.h	/^typedef int queueElementType;$/;"	t
 queueInitialize	dataStructure/queue.c	/^void queueInitialize(Queue *queue){$/;"	f
 quickSelectSmallestNumberRecursion	algorithms/quickSort.c	/^NodeType quickSelectSmallestNumberRecursion(NodeType *sortArray,int beginFlag,$/;"	f
@@ -179,6 +189,7 @@ quickSortRecursion	algorithms/quickSort.c	/^void quickSortRecursion(int beginFla
 random	algorithms/quickSort.h	7;"	d
 random	dataStructure/B+Tree.h	7;"	d
 reMalloc	dataStructure/two_stack_form_one_queue/stack.c	/^void reMalloc(MyStack *temp_stack){$/;"	f
+resultPosition	dataStructure/B+Tree.h	/^	int resultPosition;$/;"	m	struct:__anon3
 reversal_string	algorithms/reversal_char.c	/^void reversal_string(char *source_string,int string_length){$/;"	f
 rightBrotherNode	dataStructure/B+Tree.h	/^	struct MyNode *rightBrotherNode;$/;"	m	struct:MyNode	typeref:struct:MyNode::MyNode
 right_child_node	dataStructure/binary_sort_tree.h	/^	struct tree_node_tag *right_child_node;$/;"	m	struct:tree_node_tag	typeref:struct:tree_node_tag::tree_node_tag
@@ -188,11 +199,14 @@ showMaxStackElement	dataStructure/two_stack_form_one_queue/stack.c	/^void showMa
 showQueue	dataStructure/two_stack_form_one_queue/two_stack_form_one_queue.c	/^void showQueue(StackFormedQueue *localQueue){$/;"	f
 showStack	dataStructure/two_stack_form_one_queue/stack.c	/^void showStack(MyStack *temp_stack){$/;"	f
 showTheArray	algorithms/quickSort.c	/^void showTheArray(NodeType *sortArray,int length){$/;"	f
+showTheArray	dataStructure/B+Tree.c	/^void showTheArray(KeyType *array,int arrayLength){$/;"	f
 showTheArrayWithEnd	algorithms/quickSort.c	/^void showTheArrayWithEnd(NodeType *sortArray,int beginFlag,int endFlag){$/;"	f
-showTheKeyValueArray	dataStructure/B+Tree.c	/^void showTheKeyValueArray(int *keyValueArray,int arrayLength){$/;"	f
-showThePointerArray	dataStructure/B+Tree.c	/^void showThePointerArray(BTreeNode **pointerArray,int arrayLength){$/;"	f
+showTheKeyValueArray	dataStructure/B+Tree.c	/^void showTheKeyValueArray(BTreeNode *node){$/;"	f
+showThePointerArray	dataStructure/B+Tree.c	/^void showThePointerArray(BTreeNode *node){$/;"	f
 showTheQueue	dataStructure/queue.c	/^void showTheQueue(Queue *queue){$/;"	f
+showTheTreeByLevel	dataStructure/B+Tree.c	/^void showTheTreeByLevel(BTreeNode *rootNode){$/;"	f
 show_list	dataStructure/linked_list.c	/^void show_list(list_node *local_guard_node){$/;"	f
+specifiedKeyValueInsert	dataStructure/B+Tree.c	/^void specifiedKeyValueInsert(BTreeNode *fatherNode,int insertPostion,$/;"	f
 splitNode	dataStructure/B+Tree.c	/^BTreeNode *splitNode(BTreeNode *node){$/;"	f
 stackNodeType	dataStructure/two_stack_form_one_queue/two_stack_form_one_queue.h	/^typedef node_type stackNodeType;$/;"	t
 stackOne	dataStructure/two_stack_form_one_queue/two_stack_form_one_queue.h	/^	MyStack *stackOne;$/;"	m	struct:__anon1
@@ -206,6 +220,5 @@ tree_traversal_left_d_right	dataStructure/binary_sort_tree.c	/^void tree_travers
 tree_traversal_left_right_d	dataStructure/binary_sort_tree.c	/^void tree_traversal_left_right_d(TreeNode *tree_node){$/;"	f
 true	algorithms/calculate_string_distance.h	4;"	d
 true	algorithms/string_rotate_check.h	4;"	d
-xorPointerSwap	dataStructure/B+Tree.c	/^void xorPointerSwap(BTreeNode **pointerOne,BTreeNode **pointerTwo){$/;"	f
 xorSwap	algorithms/quickSort.c	/^void xorSwap(NodeType *numOne,NodeType *numTwo){$/;"	f
 xorSwap	dataStructure/B+Tree.c	/^void xorSwap(KeyType *numOne,KeyType *numTwo){$/;"	f
