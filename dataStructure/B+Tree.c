@@ -416,8 +416,6 @@ int main(void){
 	generateRandomTree(&globalRootNode,KEYVALUENUMBER);
 	showTheArray(globalKeyValueArray,KEYVALUENUMBER);
 	showTheTreeByLevel(globalRootNode);
-//	showTheTreeByLevel(globalRootNode);
-//	showThePointerArray(globalRootNode);
 	SearchResult result=BTreeSearch(globalRootNode,globalKeyValueArray[0]);
 	return 1;
 	/*
